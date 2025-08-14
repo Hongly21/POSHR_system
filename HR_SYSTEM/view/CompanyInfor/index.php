@@ -19,7 +19,9 @@
                 include ('TabCompany.php');
                 ?>
             </div>
-            <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">..Q.</div>
+            <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0"><?php 
+              include ('TabDepartment.php');
+            ?></div>
             <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab" tabindex="0">..D.</div>
             <div class="tab-pane fade" id="nav-level" role="tabpanel" aria-labelledby="nav-level-tab" tabindex="0">...S</div>
             <div class="tab-pane fade" id="nav-position" role="tabpanel" aria-labelledby="nav-position-tab" tabindex="0">...A</div>

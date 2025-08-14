@@ -1,5 +1,5 @@
 <?php
-   include('../../Config/conect.php');
+   include('../../../Config/conect.php');
 
 
    if(isset($_POST['action'])){
@@ -15,10 +15,8 @@
             echo "Success";
    
         }else{
-            echo "Faffil";
+            echo "Can not add";
         }
     }
    }
 
-
-?>

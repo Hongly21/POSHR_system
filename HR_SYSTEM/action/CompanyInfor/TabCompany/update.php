@@ -1,6 +1,6 @@
 <?php
 
-include('../../Config/conect.php');
+include('../../../Config/conect.php');
 
 
 
@@ -21,4 +21,3 @@ if(isset($_GET['action'])){
     }
    
 }
-?>

@@ -1,7 +1,7 @@
 <?php
 
-include('../../Config/conect.php');
-include ('../../root/Header.php');
+include('../../../Config/conect.php');
+include ('../../../root/Header.php');
 
 
 
@@ -18,4 +18,4 @@ if (isset($_GET['Code'])) {
     } else {
         echo "Fail";
     }
-    ?>
+
