@@ -1,6 +1,7 @@
 <?php include_once('../../root/Header.php'); ?>
 
 <body>
+    <h2 style="text-align: center; margin-top: 10px; text-transform: uppercase;">Company Information</h2>
     <div class="container" style="margin-top: 20px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); padding: 20px; border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
         <nav>
@@ -26,8 +27,12 @@
             <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab" tabindex="0">
                 <?php include('TabDivision.php'); ?>
             </div>
-            <div class="tab-pane fade" id="nav-level" role="tabpanel" aria-labelledby="nav-level-tab" tabindex="0">...S</div>
-            <div class="tab-pane fade" id="nav-position" role="tabpanel" aria-labelledby="nav-position-tab" tabindex="0">...A</div>
+            <div class="tab-pane fade" id="nav-level" role="tabpanel" aria-labelledby="nav-level-tab" tabindex="0">
+                <?php include('TabLevel.php'); ?>
+            </div>
+            <div class="tab-pane fade" id="nav-position" role="tabpanel" aria-labelledby="nav-position-tab" tabindex="0">
+                <?php include('TabPosition.php'); ?>
+            </div>
 
         </div>
     </div>

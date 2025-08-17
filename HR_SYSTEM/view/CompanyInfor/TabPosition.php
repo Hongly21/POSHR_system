@@ -1,3 +1,4 @@
+
 <?php include_once('../../root/Header.php');
 include '../../root/DataTable.php';
 include '../../Config/conect.php';
@@ -63,19 +64,19 @@ include '../../Config/conect.php';
 </style>
 <div class="container" style="margin-top: 15px; border: 0.4px solid #ccc;  padding: 20px; border-radius: 5px;">
     <?php
-    $sql = "SELECT * FROM hrdivision";
+    $sql = "SELECT * FROM hrposition";
     $result = $con->query($sql);
     ?>
     <table class="table" id="example">
         <thead>
             <tr>
                 <th>
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#divisionModal">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#positionModal">
                         <i style="margin-right: 5px;" class="fa fa-plus"></i> Add
                     </button>
                 </th>
-                <th>DivisionCode</th>
-                <th>DivisionName</th>
+                <th>PositionCode</th>
+                <th>PositionName</th>
                 <th>Status</th>
             </tr>
         </thead>
@@ -85,7 +86,7 @@ include '../../Config/conect.php';
             ?>
                 <tr>
                     <td>
-                        <button type="button" class="btn btn-primary editButton2" data-bs-toggle="modal" data-bs-target="#DevisionupdateModal"
+                        <button type="button" class="btn btn-primary editButton4" data-bs-toggle="modal" data-bs-target="#positionupdateModal"
                             data-id="<?php echo $row['Code']; ?>"
                             data-name="<?php echo $row['Description']; ?>"
                             data-status="<?php echo $row['Status']; ?>">
@@ -113,22 +114,22 @@ include '../../Config/conect.php';
 <!-- Button trigger modal -->
 
 <!-- Modal -->
-<div class="modal fade" id="divisionModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="positionModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Add New Division</h1>
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Add New Position</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="modal-container">
                     <form>
-                        <label for="divisionCode">DivisionCode:</label>
-                        <input type="text" id="divisionCode" name="divisionCode">
-                        <label for="divisionName">DivisionName:</label>
-                        <input type="text" id="divisionName" name="divisionName">
+                        <label for="positionCode">PositionCode:</label>
+                        <input type="text" id="positionCode" name="positionCode">
+                        <label for="positionName">PositionName:</label>
+                        <input type="text" id="positionName" name="positionName">
                         <label for="status">Status:</label>
-                        <select name="status" id="divisionStatus">
+                        <select name="status" id="positionStatus">
                             <option value="Active">Active</option>
                             <option value="Inactive">Inactive</option>
                         </select>
@@ -138,7 +139,7 @@ include '../../Config/conect.php';
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" id='btnsave2' class="btn btn-primary">Save</button>
+                <button type="button" id='btnsave4' class="btn btn-primary">Save</button>
             </div>
         </div>
     </div>
@@ -147,21 +148,21 @@ include '../../Config/conect.php';
 
 
 <!-- Modal Update-->
-<div class="modal fade" id="DevisionupdateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="positionupdateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Division</h1>
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Position</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="modal-container">
                     <form>
-                        <input type="hidden" id="divisionCodeupdate" name="divisionCodeupdate">
-                        <label for="divisionName">divisionName:</label>
-                        <input type="text" id="divisionNameupdate" name="divisionNameupdate">
+                        <input type="hidden" id="positionCodeupdate" name="positionCodeupdate">
+                        <label for="positionName">PositionName:</label>
+                        <input type="text" id="positionNameupdate" name="positionNameupdate">
                         <label for="status">Status:</label>
-                        <select id="divisionStatusupdate">
+                        <select id="positionStatusupdate">
                             <option value="Active">Active</option>
                             <option value="Inactive">Inactive</option>
                         </select>
@@ -170,7 +171,7 @@ include '../../Config/conect.php';
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" id='btnupdate2' class="btn btn-primary">Upadate</button>
+                <button type="button" id='btnupdate4' class="btn btn-primary">Upadate</button>
             </div>
         </div>
     </div>
@@ -200,15 +201,15 @@ include '../../Config/conect.php';
 
 <script>
     $(document).ready(function() {
-        $('#btnsave2').click(function() {
+        $('#btnsave4').click(function() {
             $.ajax({
-                url: '../../action/CompanyInfor/TabDivision/add.php',
+                url: '../../action/CompanyInfor/TabPosition/add.php',
                 method: 'POST',
                 data: {
                     action: 'btnsave',
-                    DiCode: $('#divisionCode').val(),
-                    DiName: $('#divisionName').val(),
-                    DiStatus: $('#divisionStatus').val()
+                    DiCode: $('#positionCode').val(),
+                    DiName: $('#positionName').val(),
+                    DiStatus: $('#positionStatus').val()
                 },
                 success: function(response) {
                     Swal.fire({
@@ -227,22 +228,22 @@ include '../../Config/conect.php';
     })
 
     $(document).ready(function() {
-        $('.editButton2').click(function() {
+        $('.editButton4').click(function() {
             const DiCode = $(this).data('id');
             const DiName = $(this).data('name'); // Get the value of the data-name attribute
             const DiStatus = $(this).data('status');
 
-            $('#divisionCodeupdate').val(DiCode); // Set the value of the input field
-            $('#divisionNameupdate').val(DiName);
-            $('#divisionStatusupdate').val(DiStatus);
-            $('#DevisionupdateModal').modal('show');
+            $('#positionCodeupdate').val(DiCode); // Set the value of the input field
+            $('#positionNameupdate').val(DiName);
+            $('#positionStatusupdate').val(DiStatus);
+            $('#positionupdateModal').modal('show');
 
-            $('#btnupdate2').click(function() {
-                const DiCode = $('#divisionCodeupdate').val();
-                const DiName = $('#divisionNameupdate').val();
-                const DiStatus = $('#divisionStatusupdate').val();
+            $('#btnupdate4').click(function() {
+                const DiCode = $('#positionCodeupdate').val();
+                const DiName = $('#positionNameupdate').val();
+                const DiStatus = $('#positionStatusupdate').val();
                 $.ajax({
-                    url: '../../action/CompanyInfor/TabDivision/update.php',
+                    url: '../../action/CompanyInfor/TabPosition/update.php',
                     method: 'GET',
                     data: {
                         action: 'btnupdate2',
@@ -279,7 +280,7 @@ include '../../Config/conect.php';
     function deleteCompany(code) {
         Swal.fire({
             title: 'Are you sure?',
-            text: 'This will permanently delete the Division record.',
+            text: 'This will permanently delete the Position record.',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Yes, delete it!',
@@ -289,7 +290,7 @@ include '../../Config/conect.php';
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: '../../action/CompanyInfor/TabDivision/delete.php',
+                    url: '../../action/CompanyInfor/TabPosition/delete.php',
                     method: 'GET',
                     data: {
                         Code: code
@@ -298,7 +299,7 @@ include '../../Config/conect.php';
                         Swal.fire({
                             icon: 'success',
                             title: 'Deleted!',
-                            text: 'The Division has been removed.',
+                            text: 'The Position has been removed.',
                             confirmButtonColor: '#3085d6',
                             timer: 1500,
                             showConfirmButton: false
@@ -310,7 +311,7 @@ include '../../Config/conect.php';
                         Swal.fire({
                             icon: 'error',
                             title: 'Delete Failed',
-                            text: 'Could not delete the Division.',
+                            text: 'Could not delete the Position.',
                             footer: error
                         });
                     }

@@ -280,7 +280,7 @@ include '../../Config/conect.php';
     function deleteCompany(code) {
         Swal.fire({
             title: 'Are you sure?',
-            text: 'This will permanently delete the company record.',
+            text: 'This will permanently delete the Department record.',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Yes, delete it!',
@@ -299,7 +299,7 @@ include '../../Config/conect.php';
                         Swal.fire({
                             icon: 'success',
                             title: 'Deleted!',
-                            text: 'The company has been removed.',
+                            text: 'The Department has been removed.',
                             confirmButtonColor: '#3085d6',
                             timer: 1500,
                             showConfirmButton: false
@@ -311,7 +311,7 @@ include '../../Config/conect.php';
                         Swal.fire({
                             icon: 'error',
                             title: 'Delete Failed',
-                            text: 'Could not delete the company.',
+                            text: 'Could not delete the Department.',
                             footer: error
                         });
                     }
