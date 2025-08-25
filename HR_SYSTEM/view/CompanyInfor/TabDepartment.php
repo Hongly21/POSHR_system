@@ -91,7 +91,7 @@ include '../../Config/conect.php';
                             data-status="<?php echo $row['Status']; ?>">
                             <i class="fa fa-edit"></i>
                         </button>
-                        <button class="btn btn-danger" onclick="deleteCompany('<?php echo $row['Code']; ?>')"><i class="fa fa-trash"></i></button>
+                        <button class="btn btn-danger" onclick="deleteCompanyd('<?php echo $row['Code']; ?>')"><i class="fa fa-trash"></i></button>
 
                     </td>
                     <td><?php echo $row['Code']; ?></td>
@@ -277,7 +277,7 @@ include '../../Config/conect.php';
 
 <!-- //delete alert mesaages -->
 <script>
-    function deleteCompany(code) {
+    function deleteCompanyd(code) {
         Swal.fire({
             title: 'Are you sure?',
             text: 'This will permanently delete the Department record.',
