@@ -87,7 +87,7 @@ include '../../Config/conect.php';
             ?>
                 <tr>
                     <td>
-                        <button id="editButton" type="button" data-bs-toggle="modal" data-bs-target="#updateLeaveTypeModal" class="btn btn-primary"
+                        <button type="button" data-bs-toggle="modal" data-bs-target="#updateLeaveTypeModal" class="btn btn-primary editButton"
                             data-code="<?php echo $row['Code']; ?>"
                             data-leaveType="<?php echo $row['LeaveType']; ?>"
                             data-isprobation="<?php echo $row['IsProbation']; ?>"
@@ -187,7 +187,7 @@ include '../../Config/conect.php';
                 <form id="addLeaveTypeForm">
                     <div class="mb-3">
                         <label for="code" class="form-label">Leave Code</label>
-                        <input type="text" class="form-control" id="LeaveCodeUpdate" required>
+                        <input type="text" class="form-control" id="LeaveCodeUpdate" required readonly>
                     </div>
                     <div class="mb-3">
                         <label for="name" class="form-label">Leave Type</label>
@@ -260,12 +260,12 @@ include '../../Config/conect.php';
 
         })
 
-        $('#editButton').click(function() {
-            var code=$(this).data('code');
-            var leavetype=$(this).data('leavetype');
-            var isprobation=$(this).data('isprobation');
-            var isdeduction=$(this).data('isdeduction');
-            var isoverbalance=$(this).data('isoverbalance');
+        $('.editButton').click(function() {
+            var code = $(this).data('code');
+            var leavetype = $(this).data('leavetype');
+            var isprobation = $(this).data('isprobation');
+            var isdeduction = $(this).data('isdeduction');
+            var isoverbalance = $(this).data('isoverbalance');
 
             // set value to modal update
             $('#LeaveCodeUpdate').val(code);
@@ -273,6 +273,42 @@ include '../../Config/conect.php';
             $('#IsProbationUpdate').prop('checked', isprobation == 1); // set checked
             $('#IsDeductionUpdate').prop('checked', isdeduction == 1); // set checked
             $('#IsOverBalanceUpdate').prop('checked', isoverbalance == 1); // set checked
+        })
+
+        $('#updateLeaveType').click(function() {
+            var code = $('#LeaveCodeUpdate').val();
+            var leavetype = $('#LeaveTypeUpdate').val();
+
+            var isprobation = $('#IsProbationUpdate').prop('checked') ? 1 : 0;
+            var isdeduction = $('#IsDeductionUpdate').prop('checked') ? 1 : 0;
+            var isoverbalance = $('#IsOverBalanceUpdate').prop('checked') ? 1 : 0;
+
+
+            $.ajax({
+                url: '../../action/LeavePolicy/update.php',
+                method: 'POST',
+                data: {
+                    action: 'updateLeaveType',
+                    code: code,
+                    leavetype: leavetype,
+                    isprobation: isprobation,
+                    isdeduction: isdeduction,
+                    isoverbalance: isoverbalance
+                },
+                success: function() {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Update Successfully',
+                        text: 'Update LeaveType Successfully'
+                    }).then(function() {
+                        location.reload(); //  Refresh the page
+
+                    })
+                },
+                error: function(xhr, status, error) {
+                    alert('Error: ' + error);
+                }
+            })
         })
 
 

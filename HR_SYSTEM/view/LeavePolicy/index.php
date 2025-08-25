@@ -17,6 +17,7 @@
             </div>
             <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">
                 <?php
+                include ('PublicHoliday.php');
                 ?></div>
 
         </div>
