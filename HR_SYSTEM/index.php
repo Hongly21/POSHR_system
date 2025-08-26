@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>index</title>
+    <title>HR_System</title>
 </head>
     <frameset rows="8%,92%" frameborder="0" border="0" >
         <frame src="navbar.php" name="">
