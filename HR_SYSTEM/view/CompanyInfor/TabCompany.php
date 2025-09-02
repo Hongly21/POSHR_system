@@ -302,4 +302,3 @@ include '../../Config/conect.php';
         });
     }
 </script>
-

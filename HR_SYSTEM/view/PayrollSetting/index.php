@@ -207,7 +207,7 @@ include("../../root/DataTable.php");
             ?>
                 <tr>
                     <td>
-                        <button class="btn btn-primary editButton" data-bs-toggle="modal" data-bs-target="#updateModal"
+                        <button class=" editButton" data-bs-toggle="modal" data-bs-target="#updateModal"
                             data-id="<?php echo $row['id']; ?>"
                             data-code="<?php echo $row['code']; ?>"
                             data-description="<?php echo $row['description']; ?>"
