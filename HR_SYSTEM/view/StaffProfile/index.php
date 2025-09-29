@@ -65,13 +65,16 @@ include '../../Config/conect.php';
 <h3 class="text-center" style="margin-top: 15px; text-transform: uppercase;">Staff Profile</h3>
 <div class="container" style="margin-top: 15px; border: 0.4px solid #ccc;  padding: 20px; border-radius: 5px;">
     <table class="table" id="example" border="1">
-        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#AddstaffModal" style="margin-bottom: 8px; font-size: 14px; ">
+        <!-- <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#AddstaffModal" style="margin-bottom: 8px; font-size: 14px; ">
             Add New
-        </button>
-        <!-- Button trigger modal -->
-        <!-- <button type="button" data-bs-toggle="modal" data-bs-target="#AddstaffModal" class="btn btn-primary">
-            Add
         </button> -->
+        <!-- Button trigger modal -->
+
+        <a href="create.php" style="text-decoration: none; color:white;">
+            <button class="btn btn-success" style="margin-bottom: 8px; font-size: 14px;"> <i class="fa fa-plus" style="margin-right: 4px;"></i> Add New </button>
+
+        </a>
+
         <thead>
             <tr>
                 <th style="width: 120px;">Action</th>
@@ -89,13 +92,25 @@ include '../../Config/conect.php';
         </thead>
         <tbody>
             <?php
-            $sql = "SELECT * FROM hrstaffprofile";
+            $sql = "SELECT hrstaffprofile.*, 
+                    hrcompany.Description as CompanyName,
+                    hrdepartment.Description as DepartmentName,
+                    hrdivision.Description as DivisionName,
+                    hrposition.Description as PositionName,
+                    hrlevel.Description as LevelName 
+                    FROM hrstaffprofile
+                    LEFT JOIN hrcompany ON hrstaffprofile.Company = hrcompany.Code
+                    LEFT JOIN hrdepartment ON hrstaffprofile.Department = hrdepartment.Code
+                    LEFT JOIN hrdivision ON hrstaffprofile.Division = hrdivision.Code
+                    LEFT JOIN hrposition ON hrstaffprofile.Position = hrposition.Code
+                    LEFT JOIN hrlevel ON hrstaffprofile.Level = hrlevel.Code
+                    ORDER BY EmpCode DESC";
             $resutl = $con->query($sql);
             while ($row = $resutl->fetch_assoc()) {
             ?>
                 <tr>
                     <td style="width: 90px;">
-                        <button type="button" data-bs-toggle="modal" data-bs-target="#updateTaxRateModal" class="btn btn-primary editButton"
+                        <button style="font-size: 13px;" type="button" data-bs-toggle="modal" data-bs-target="#updateTaxRateModal" class="btn btn-primary editButton"
                             data-code="<?php echo $row['EmpCode']; ?>"
                             data-empname="<?php echo $row['EmpName']; ?>"
                             data-company="<?php echo $row['Company']; ?>"
@@ -117,7 +132,7 @@ include '../../Config/conect.php';
                             data-photo="<?php echo $row['Photo']; ?>">
                             <i style="color: white;" class="fa fa-edit"></i>
                         </button>
-                        <button class="btn btn-danger" onclick="deleteCompany('<?php echo $row['EmpCode']; ?>')"><i class="fa fa-trash"></i></button>
+                        <button style="font-size: 13px;" class="btn btn-danger" onclick="deleteCompany('<?php echo $row['EmpCode']; ?>')"><i class="fa fa-trash"></i></button>
                     </td>
                     <td><img src="../../assets/images/<?php echo $row['Photo']; ?>" style="width: 60px; height: 60px;"></td>
                     <td><?php echo $row['EmpCode']; ?></td>
@@ -394,29 +409,6 @@ include '../../Config/conect.php';
         </div>
     </div>
 </div>
-
-
-
-
-<!--ADD Modal -->
-<div class="modal fade" id="AddstaffModal" tabindex="-1" aria-labelledby="addstaffModalLabel" aria-hidden="true">
-    <div class="modal-dialog" style="max-width: 1100px;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addLeaveTypeModalLabel">Add New Staff</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <?php include('create.php') ?>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-
-
 
 
 <script>

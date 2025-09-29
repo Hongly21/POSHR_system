@@ -1,45 +1,117 @@
 <?php
 include('../../Config/conect.php');
-include('../../root/Header.php');
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Staff details
+    $empCode = $_POST['empCode'];
+    $empName = $_POST['empName'];
+    $gender = $_POST['gender'];
+    $dob = $_POST['dob'];
+    $salary = $_POST['salary'];
 
-
-if (isset($_POST['btnSubmit'])) {
-    $empcode = $_POST['empCode'];
-    $empname = $_POST['empName'];
-    $empGender = $_POST['gender'];
-    $empdob = $_POST['dob'];
-    $empsalary = $_POST['salary'];
     $img = $_FILES['photo']['name'];
     $tmp_name = $_FILES['photo']['tmp_name'];
     move_uploaded_file($tmp_name, "../../assets/images/$img");
+
+
+    $checkSQL = "SELECT EmpCode FROM hrstaffprofile WHERE EmpCode = '$empCode' LIMIT 1";
+    $checkRun = $con->query($checkSQL);
+
+    if ($checkRun && $checkRun->num_rows > 0) {
+        echo "Employee Code already exists!";
+        exit;
+    }
+
+    //job details
     $company = $_POST['company'];
+    $position = $_POST['position'];
     $department = $_POST['department'];
     $division = $_POST['division'];
-    $position = $_POST['position'];
     $level = $_POST['level'];
-    $status = $_POST['status'];
     $startdate = $_POST['startDate'];
-    $ispro = $_POST['isProb'];
-    $probationDate = $_POST['probationDate'];
-    $tel = $_POST['telegram'];
-    $address= $_POST['address'];
-    $number= $_POST['contact'];
-    $email= $_POST['email'];
+    $proEnd = $_POST['probationDate'];
+    $isProb = $_POST['isProb'];
+    $telegram = $_POST['telegram'];
+    $status = $_POST['status'];
+    $lineManager = $_POST['lineManager'];
+    $headdepartment = $_POST['hod'];
+    $payparameter = $_POST['payParamter'];
 
+    //contact details
+    $contact = $_POST['contact'];
+    $email = $_POST['email'];
+    $address = $_POST['address'];
 
+    if ($empCode && $empName && $gender && $dob && $salary && $company && $position && $department && $division && $level && $status) {
+        $empSQL = "INSERT INTO `hrstaffprofile` 
+                        (`EmpCode`, `EmpName`, `Gender`, `Dob`, `Position`, `Department`, `Company`, `Level`,
+                        `Division`, `StartDate`, `Status`, `Contact`, `Email`, `Address`,
+                        `LineManager`, `Hod`, `Photo`, `IsProb`, `Salary`, `PayParameter`, 
+                        `Telegram`, `ProbationDate`)
+     VALUES ('$empCode', '$empName', '$gender', '$dob', '$position', '$department', '$company', '$level', '$division', 
+     '$startdate', '$status', '$contact', '$email', '$address',
+      '$lineManager', '$headdepartment', '$img', '$isProb', '$salary', '$payparameter', '$telegram', '$proEnd');";
+        $runEmp = $con->query($empSQL);
 
+        // Family members
+        if (!empty($_POST['family'])) {
+            $familyMembers = json_decode($_POST['family'], true);
 
-    $sql = "INSERT INTO `hrstaffprofile`
-       (`EmpCode`, `EmpName`, `Gender`, `Dob`, `Salary`, `Photo`, `Company`, `Department`, `Division`, `Position`,
-        `Level`, `StartDate`, `IsProb`,`ProbationDate`, `Telegram`, `Address`, `Contact`, `Email`, `Status`)
-        VALUES 
-        ( '$empcode', '$empname', '$empGender', '$empdob', '$empsalary', '$img',
-        '$company', '$department', '$division', '$position', '$level', '$startdate', '$ispro','$probationDate', '$tel', '$address', '$number', '$email', '$status');";
-    $result = $con->query($sql);
-    if ($result) {
-        echo "Success";
+            foreach ($familyMembers as $member) {
+                $name     = $member['name'];
+                $relation = $member['relation'];
+                $fgender  = $member['gender'];
+                $istax    = $member['istax'];
+
+                if ($name && $relation && $fgender) {
+                    $sql = "INSERT INTO `hrfamily` (`EmpCode`, `RelationName`, `RelationType`, `Gender`, `IsTax`)
+             VALUES ('$empCode', '$name', '$relation', '$fgender', '$istax')";
+                    $runfamily = $con->query($sql);
+                }
+            }
+        }
+        //educations 
+        if (!empty($_POST['education'])) {
+            $educations = json_decode($_POST['education'], true);
+            foreach ($educations as $education) {
+                $institution = $education['institution'];
+                $degree = $education['degree'];
+                $fieldOfStudy = $education['fieldOfStudy'];
+                $startDate = $education['startDate'];
+                $endDate = $education['endDate'];
+
+                if ($institution && $degree && $fieldOfStudy && $startDate && $endDate) {
+                    $sql = "INSERT INTO `hreducation` (`EmpCode`, `Institution`, `Degree`, `FieldOfStudy`, `StartDate`, `EndDate`)
+             VALUES ('$empCode', '$institution', '$degree', '$fieldOfStudy', '$startDate', '$endDate');";
+                    $runeducation = $con->query($sql);
+                }
+            }
+        }
+        //documents 
+        if (!empty($_POST['document'])) {
+            $documents = json_decode($_POST['document'], true);
+            foreach ($documents as $document) {
+                $docType = $document['docType'];
+                $description = $document['description'];
+
+                if ($docType && $description) {
+                    $sql = "INSERT INTO `hrstaffdocument` (`EmpCode`, `DocType`, `Description`)
+             VALUES ('$empCode', '$docType', '$description');";
+                    $rundocument = $con->query($sql);
+                }
+            }
+        }
+        if($rundocument && $runfamily && $runeducation){
+            echo "success";
+        }else if($runEmp && !$runfamily || !$runeducation || !$rundocument){
+            echo "Success add only staff";
+        }
     } else {
-        echo "Can not add" . $con->error;
+        echo "All fields are required! Please fill all the required fields on Staff Profile form.";
+        exit;
     }
+
+
+} else {
+    echo "Invalid request";
 }
