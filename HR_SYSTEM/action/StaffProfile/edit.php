@@ -5,7 +5,7 @@
 
 
 
-   if(isset($_POST['updatestaff'])){
+   if(isset($_POST['btnupdate'])){
     echo "Success";
    }
 ?>

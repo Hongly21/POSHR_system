@@ -44,17 +44,17 @@
                         <li>
                             <a href="../view/LeavePolicy/index.php" target="content">Leave Policy</a>
                         </li>
-                        <li>
+                        <!-- <li>
                             <a href="../view/Menu/index.php" target="content">General Settings</a>
-                        </li>
+                        </li> -->
                         <li>
                             <a href="../view/User/index.php" target="content">User Settings</a>
                         </li>
-                        <li>
+                        <!-- <li>
                             <a href="../view/Telegramconfig/index.php" target="content">Telegram config</a>
-                        </li>
+                        </li> -->
                         <li>
-                            <a href="../view/OTSetting/index.php" target="content">OT Setting</a>
+                            <a href="../view/OT/index.php" target="content">OT Setting</a>
                         </li>
                     </ul>
                 </li>
