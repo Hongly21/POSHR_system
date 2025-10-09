@@ -126,10 +126,10 @@
                             <a href="../view/PRDeduction/index.php" target="content">Deduction</a>
                         </li>
                         <li>
-                            <a href="../view/PRGenSalary/generatesalary.php" target="content">Generate Salary</a>
+                            <a href="../view/PRGenSalary/index.php" target="content">Generate Salary</a>
                         </li>
                         <li>
-                            <a href="../view/PRPayDetail/paydetail.php" target="content">Pay Detail</a>
+                            <a href="../view/PRPayDetail/paydedail.php" target="content">Pay Detail</a>
                         </li>
                         <li>
                             <a href="../view/PRApproveSalary/index.php" target="content">Salary Approval</a>
