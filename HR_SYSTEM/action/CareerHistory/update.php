@@ -8,6 +8,11 @@
     $careerCode = $_GET['careerCode'];
     $remark = $_GET['remark'];
 
+    if($endDate || $careerCode == 'RESIGN') {
+        $sql1="UPDATE hrstaffprofile SET Status = 'Inactive' WHERE EmpCode = '$empid'";
+        $run1 = $con->query($sql1);
+    }
+
     $sql = "UPDATE `careerhistory` SET `StartDate`='$startDate', `EndDate`='$endDate', `Increase`='$increase', `CareerHistoryType`='$careerCode', `Remark`='$remark' WHERE `EmployeeID`='$empid'";
     $run = $con->query($sql);
     if($run){

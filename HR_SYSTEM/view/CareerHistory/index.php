@@ -85,14 +85,21 @@ include('../../root/Header.php');
                             </thead>
                             <tbody>
                                 <?php
-                                $sql = "SELECT * FROM careerhistory";
+                                // $sql = "SELECT * FROM careerhistory";
+                                $sql = "SELECT  P.Description AS PositionDes,
+                                        D.Description AS Dept, ch.*, sp.EmpName 
+                                        FROM careerhistory ch 
+                                        INNER JOIN hrstaffprofile sp ON ch.EmployeeID = sp.EmpCode 
+                                        INNER join hrposition P On P.Code=ch.PositionTitle
+                                        INNER join hrdepartment D On D.code = Ch.Department 
+                                        ORDER BY ch.CreatedAt DESC";
                                 $run = $con->query($sql);
                                 while ($row = $run->fetch_array()) {
                                 ?>
                                     <tr>
                                         <td>
                                             <a href="edit.php? empid=<?php echo $row['EmployeeID']; ?>"> <button class="btn btn-primary"> <i class="far fa-edit"></i></button>
-                                               </a>
+                                            </a>
                                             <button class="btn btn-danger" onclick="deleteLeaveType('<?php echo $row['EmployeeID']; ?>')"><i class="far fa-trash-alt"></i></button>
 
                                         </td>
@@ -110,8 +117,8 @@ include('../../root/Header.php');
                                             }
                                             ?>
                                         </td>
-                                        <td><?php echo $row['PositionTitle']; ?></td>
-                                        <td><?php echo $row['Department']; ?></td>
+                                        <td><?php echo $row['PositionDes']; ?></td>
+                                        <td><?php echo $row['Dept']; ?></td>
                                         <td><?php echo $row['StartDate']; ?></td>
                                         <td><?php echo $row['EndDate']; ?></td>
                                         <td><?php echo $row['Remark']; ?></td>

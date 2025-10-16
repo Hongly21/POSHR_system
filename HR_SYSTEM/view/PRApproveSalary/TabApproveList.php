@@ -21,7 +21,6 @@ include('../../root/Header.php');
         </thead>
         <tbody>
             <?php
-            // Loop through the data and create table rows
             $sql = "SELECT 
         sum(s.Salary) as TotalSalary,
         sum(s.Allowance) as TotalAllowance,
@@ -37,7 +36,8 @@ include('../../root/Header.php');
         FROM hisgensalary S
         INNER JOIN prapprovesalary A ON S.InMonth = A.InMonth 
         Where A.status='Approved' 
-        GROUP BY A.InMonth, A.status, A.Remark, A.ID ";
+        GROUP BY A.InMonth, A.status, A.Remark, A.ID";
+
             // Execute the query
             $stmt = $con->prepare($sql);
             $stmt->execute();

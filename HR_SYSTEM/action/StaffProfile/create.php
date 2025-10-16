@@ -53,6 +53,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       '$lineManager', '$headdepartment', '$img', '$isProb', '$salary', '$payparameter', '$telegram', '$proEnd');";
         $runEmp = $con->query($empSQL);
 
+        $sqlcareerhistory = "INSERT INTO careerhistory (
+            CareerHistoryType, EmployeeID, PositionTitle, Department, Division, Company,
+            StartDate, EndDate, Remark, Increase,
+            CreatedAt, UpdatedAt
+        ) VALUES (
+            'New', '$empCode', '$position', '$department','$division','$company',
+            '$startdate', '', '', '0',
+            NOW(), NOW()
+        );";
+        $runcareerhistory = $con->query($sqlcareerhistory);
+
+
         // Family members
         if (!empty($_POST['family'])) {
             $familyMembers = json_decode($_POST['family'], true);
@@ -101,17 +113,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
         }
-        if($rundocument && $runfamily && $runeducation){
+        if ($rundocument && $runfamily && $runeducation) {
             echo "success";
-        }else if($runEmp && !$runfamily || !$runeducation || !$rundocument){
+        } else if ($runEmp && !$runfamily || !$runeducation || !$rundocument) {
             echo "Success add only staff";
         }
     } else {
         echo "All fields are required! Please fill all the required fields on Staff Profile form.";
         exit;
     }
-
-
 } else {
     echo "Invalid request";
 }

@@ -96,7 +96,7 @@ include('../../Config/conect.php'); ?>
                                                             echo $row2['Description'];
                                                         }
                                                     }
-                                                    ?>">
+                                            ?>">
                                     </div>
                                 </div>
                             </div>
@@ -125,7 +125,7 @@ include('../../Config/conect.php'); ?>
                                     <div class="mb-3">
                                         <label for="careerCode" class="form-label required">Career Code</label>
                                         <select name="careerCode" id="careerCodeUpdate" class="form-select">
-                                            <option value=""><?php echo $careerCode; ?></option>
+                                            <option value="<?php echo $careerCode; ?>"><?php echo $careerCode; ?></option>
                                             <option value="NEW">New Join</option>
                                             <option value="PROMOTE">Promote</option>
                                             <option value="TRANSFER">Transfer</option>
