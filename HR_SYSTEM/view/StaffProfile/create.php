@@ -616,8 +616,6 @@ include('../../Config/conect.php');
         }
     });
 
-
-
     // Initialize Toast notification
     const Toast = Swal.mixin({
         toast: true,
