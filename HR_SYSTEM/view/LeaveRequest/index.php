@@ -21,24 +21,7 @@ $result = $con->query($sql);
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <!-- Custom CSS -->
-    <link href="../../style/career.css" rel="stylesheet">
-    <style>
-        .status-pending {
-            color: #ffc107;
-            font-weight: 600;
-        }
 
-        .status-approved {
-            color: #28a745;
-            font-weight: 600;
-        }
-
-        .status-rejected {
-            color: #dc3545;
-            font-weight: 600;
-        }
-    </style>
 </head>
 
 <body>
@@ -49,7 +32,7 @@ $result = $con->query($sql);
                     <div class="card-header">
                         <div class="d-flex justify-content-between align-items-center">
                             <h4 class="mb-0">Leave Request List</h4>
-                            <a href="create.php" class="btn btn-primary">
+                            <a href="create.php" class="btn btn-sm btn-primary me-2">
                                 <i class="fas fa-plus me-2"></i>New Leave Request
                             </a>
                         </div>
@@ -76,11 +59,12 @@ $result = $con->query($sql);
                                                 class="btn btn-sm btn-warning">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            
-                                                <a href="../../action/LeaveRequest/delete.php?id=<?php echo ($row['ID']); ?>">
-                                                    <i class="fas fa-trash"></i>
-                                                </a>
-                                        
+
+
+                                            <button class="btn btn-sm btn-danger" onclick="deleteCompanyd('<?php echo $row['ID']; ?>')"><i class="fa fa-trash"></i></button>
+
+
+
 
                                         </td>
                                         <td><?php echo htmlspecialchars($row['EmpCode']); ?></td>
@@ -95,10 +79,7 @@ $result = $con->query($sql);
                                         <td><?php echo date('d M Y', strtotime($row['FromDate'])); ?></td>
                                         <td><?php echo date('d M Y', strtotime($row['ToDate'])); ?></td>
                                         <td>
-                                            <?php
-                                            $statusClass = 'status-' . strtolower($row['Status']);
-                                            echo "<span class='{$statusClass}'>" . htmlspecialchars($row['Status']) . "</span>";
-                                            ?>
+                                            <span class="badge bg-<?php echo $row['Status'] === 'Approved' ? 'success' : ($row['Status'] === 'Rejected' ? 'danger' : 'warning'); ?>"><?php echo $row['Status']; ?></span>
                                         </td>
                                         <td><?php echo htmlspecialchars($row['Reason'] ?? '-'); ?></td>
                                     </tr>
@@ -122,3 +103,49 @@ $result = $con->query($sql);
 </body>
 
 </html>
+
+<!-- //delete alert mesaages -->
+<script>
+    function deleteCompanyd(code) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'This will permanently delete the Leave record.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'Cancel',
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '../../action/LeaveRequest/delete.php',
+                    method: 'GET',
+                    data: {
+                        Code: code
+                    },
+                    success: function(response) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Deleted!',
+                            text: 'The Leave request has been removed.',
+                            confirmButtonColor: '#3085d6',
+                            timer: 1500,
+                            showConfirmButton: false
+                        }).then(() => {
+                            location.reload(); // 🔄 Refresh the page
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Delete Failed',
+                            text: 'Could not delete the Leave request.',
+                            footer: error
+                        });
+                    }
+                });
+            }
+        });
+    }
+</script>

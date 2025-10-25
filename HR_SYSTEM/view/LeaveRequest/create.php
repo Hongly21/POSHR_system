@@ -1,31 +1,12 @@
 <?php
 include("../../Config/conect.php");
 
+include('../../root/Header.php');
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Leave Request</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Select2 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet">
-    <!-- SweetAlert2 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="../../style/career.css" rel="stylesheet">
-    <style>
-        .required:after {
-            content: " *";
-            color: red;
-        }
-    </style>
-</head>
 
 <body>
     <div class="container-fluid mt-4">
@@ -41,7 +22,7 @@ include("../../Config/conect.php");
                         </div>
                     </div>
                     <div class="card-body">
-                        <form id="leaveRequestForm" action="../../action/LeaveRequest/create.php" method="POST" novalidate>
+                        <form id="leaveRequestForm">
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="mb-3">
@@ -111,7 +92,7 @@ include("../../Config/conect.php");
                             </div>
                             <div class="row">
                                 <div class="col-12">
-                                    <button type="submit" class="btn btn-primary">
+                                    <button class="btn btn-primary btnsubmit">
                                         <i class="fas fa-save me-2"></i>Submit Request
                                     </button>
                                 </div>
@@ -123,12 +104,65 @@ include("../../Config/conect.php");
         </div>
     </div>
 
-    <!-- Scripts -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </body>
 
 </html>
+
+<script>
+    $(document).ready(function() {
+        $('.btnsubmit').click(function(e) {
+            e.preventDefault(); // ✅ prevent form submit reload
+
+            var empcode = $('#employeeID').val();
+            var leaveType = $('#leaveType').val();
+            var fromDate = $('#fromDate').val();
+            var toDate = $('#toDate').val();
+            var reason = $('#reason').val();
+
+            $.ajax({
+                url: '../../action/LeaveRequest/create.php',
+                method: 'POST',
+                data: {
+                    empcode: empcode,
+                    leaveType: leaveType,
+                    fromDate: fromDate,
+                    toDate: toDate,
+                    reason: reason,
+                },
+                success: function(response) {
+                    console.log(response); // ✅ see what PHP returns
+                    response = response.trim(); // ✅ remove spaces/newlines
+
+                    if (response === 'success') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: 'Leave request submitted successfully',
+                            showConfirmButton: true
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = '../../view/LeaveRequest/index.php';
+                            }
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: response,
+                            showConfirmButton: true
+                        });
+                    }
+                },
+                error: function(error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Something went wrong: ' + error,
+                        showConfirmButton: true
+                    });
+                }
+            });
+        });
+    });
+</script>

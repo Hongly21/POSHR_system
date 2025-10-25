@@ -18,7 +18,7 @@ include('../../root/Header.php');
                         </div>
                     </div>
                     <div class="card-body">
-                        <form action="../../action/PRBouns/create.php" method="POST" id="allowanceForm">
+                        <form id="allowanceForm">
                             <div class="row mb-3">
                                 <div class="col-md-4">
                                     <label for="EmpCode" class="form-label">Employee</label>
@@ -86,7 +86,7 @@ include('../../root/Header.php');
                             </div>
 
                             <div class="text-end">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="button" id="saveBonus" class="btn btn-primary">
                                     <i class="fas fa-save me-2"></i>Save Bouns
                                 </button>
                             </div>
@@ -96,18 +96,66 @@ include('../../root/Header.php');
             </div>
         </div>
     </div>
-    <script>
-        $(document).ready(function() {
-            // Date validation
-            $('#FromDate, #ToDate').on('change', function() {
-                const fromDate = new Date($('#FromDate').val());
-                const toDate = new Date($('#ToDate').val());
 
-                if (fromDate && toDate && fromDate > toDate) {
-                    alert('To Date must be after From Date');
-                    $('#ToDate').val('');
-                }
-            });
-        });
-    </script>
 </body>
+
+<script>
+    $(document).ready(function() {
+        $('#saveBonus').click(function() {
+            var empcode = $('#EmpCode').val();
+            var bonustype = $('#BonusType').val();
+            var amount = $('#Amount').val();
+            var fromdate = $('#FromDate').val();
+            var todate = $('#ToDate').val();
+            var status = $('#Status').val();
+            var description = $('#Description').val();
+            var remark = $('#Remark').val();
+
+            $.ajax({
+                url: '../../action/PRBouns/create.php',
+                method: 'POST',
+                data: {
+                    empcode: empcode,
+                    bonustype: bonustype,
+                    amount: amount,
+                    fromdate: fromdate,
+                    todate: todate,
+                    status: status,
+                    description: description,
+                    remark: remark
+                },
+                success: function(response) {
+                    if (response == 'success') {
+                        Swal.fire({
+                            title: 'Success',
+                            text: 'Bonus Saved Successfully',
+                            icon: 'success',
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then(() => {
+                            window.location.href = 'index.php';
+                        });
+                    } else if (response == 'errorfield') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Please fill in all required fields!'
+                        });
+
+                    }
+                },
+                error: function(xhr, status, error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Failed to save bonus: ' + error
+                    });
+                }
+            })
+
+
+
+
+        })
+    })
+</script>

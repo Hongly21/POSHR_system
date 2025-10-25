@@ -35,7 +35,7 @@ while ($row = $run->fetch_assoc()) {
                         </div>
                     </div>
                     <div class="card-body">
-                        <form action="../../action/PRAllowance/update.php" method="POST" id="allowanceForm">
+                        <form id="allowanceForm">
                             <div class="row mb-3">
                                 <div class="col-md-4">
                                     <label for="EmpCode" class="form-label">Employee</label>
@@ -46,7 +46,7 @@ while ($row = $run->fetch_assoc()) {
                                                                                 $row = $run->fetch_assoc();
                                                                                 echo $row['EmpName'] . ' (' . $empcode . ')';
                                                                                 ?></option>
-                                        <input type="hidden" name="id" value="<?php echo $id; ?>">
+                                        <input type="hidden" id="id" name="id" value="<?php echo $id; ?>">
 
                                     </select>
                                 </div>
@@ -102,7 +102,7 @@ while ($row = $run->fetch_assoc()) {
                             </div>
 
                             <div class="text-end">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="button" class="btn btn-primary" id="updateAllowance">
                                     <i class="fas fa-save me-2"></i>Update
                                 </button>
                             </div>
@@ -114,16 +114,62 @@ while ($row = $run->fetch_assoc()) {
     </div>
     <script>
         $(document).ready(function() {
-            // Date validation
-            $('#FromDate, #ToDate').on('change', function() {
-                const fromDate = new Date($('#FromDate').val());
-                const toDate = new Date($('#ToDate').val());
+            $('#updateAllowance').click(function() {
+                var id = $('#id').val();
+                var EmpCode = $('#EmpCode').val();
+                var AllowanceType = $('#AllowanceType').val();
+                var Amount = $('#Amount').val();
+                var FromDate = $('#FromDate').val();
+                var ToDate = $('#ToDate').val();
+                var Status = $('#Status').val();
+                var Description = $('#Description').val();
+                var Remark = $('#Remark').val();
 
-                if (fromDate && toDate && fromDate > toDate) {
-                    alert('To Date must be after From Date');
-                    $('#ToDate').val('');
-                }
-            });
-        });
+
+
+                $.ajax({
+                    url: '../../action/PRAllowance/update.php',
+                    type: 'POST',
+                    data: {
+                        id: id,
+                        EmpCode: EmpCode,
+                        AllowanceType: AllowanceType,
+                        Amount: Amount,
+                        FromDate: FromDate,
+                        ToDate: ToDate,
+                        Status: Status,
+                        Description: Description,
+                        Remark: Remark
+                    },
+                    success: function(response) {
+                        if (response == 'success') {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: 'Allowance updated successfully',
+                                showConfirmButton: false,
+                                timer: 1500
+                            }).then(function() {
+                                window.location.href = 'index.php';
+                            });
+                        } else if (response == 'error') {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Failed to update allowance. Please try again.',
+                            })
+                        }
+                    },
+                    error: function(error) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Something went wrong: ' + error,
+                            showConfirmButton: true
+                        });
+                    }
+                })
+            })
+        })
     </script>
 </body>

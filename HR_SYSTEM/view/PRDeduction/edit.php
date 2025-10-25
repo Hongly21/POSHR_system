@@ -19,7 +19,7 @@ include('../../root/Header.php');
                         </div>
                     </div>
                     <div class="card-body">
-                        <form action="../../action/PRDeduction/update.php" method="POST" id="deductionForm">
+                        <form id="deductionForm">
                             <input type="hidden" name="id" value="<?php
 
                                                                     $id = $_GET['id'];
@@ -104,7 +104,7 @@ include('../../root/Header.php');
                                 </div>
 
                                 <div class="text-end">
-                                    <button type="submit" class="btn btn-primary">
+                                    <button type="button" id="updateDed" class="btn btn-primary">
                                         <i class="fas fa-save me-2"></i>Update Deduction
                                     </button>
                                 </div>
@@ -119,50 +119,31 @@ include('../../root/Header.php');
 <?php endwhile; ?>
 <script>
     $(document).ready(function() {
-
-        // Form validation before submit
-        $('#bonusForm').on('submit', function(e) {
-            const amount = parseFloat($('#amount').val());
-            const fromDate = new Date($('#fromDate').val());
-            const toDate = new Date($('#toDate').val());
-
-            if (amount <= 0) {
-                e.preventDefault();
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Invalid Amount',
-                    text: 'Amount must be greater than 0',
-                    timer: 3000,
-                    timerProgressBar: true
-                });
-                return false;
-            }
-
-            if (fromDate > toDate) {
-                e.preventDefault();
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Invalid Date Range',
-                    text: 'To Date must be after From Date',
-                    timer: 3000,
-                    timerProgressBar: true
-                });
-                return false;
-            }
+        $('#updateDed').click(function() {
+            var formData = $('#deductionForm').serialize();
+            $.ajax({
+                type: 'POST',
+                url: '../../action/PRDeduction/update.php',
+                data: formData,
+                success: function(response) {
+                    if (response === 'success') {
+                        Swal.fire({
+                            title: 'Success',
+                            text: 'Deduction Updated Successfully',
+                            icon: 'success',
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then(() => {
+                            window.location.href = 'index.php';
+                        });
+                    } else {
+                        alert('Error updating Deduction: ' + response);
+                    }
+                }
+            });
         });
 
-        // Check for error message
-        const urlParams = new URLSearchParams(window.location.search);
-        const errorMsg = urlParams.get('error');
-        if (errorMsg) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error!',
-                text: decodeURIComponent(errorMsg),
-                timer: 3000,
-                timerProgressBar: true
-            });
-        }
+
     });
 </script>
 </body>

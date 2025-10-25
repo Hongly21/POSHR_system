@@ -6,6 +6,7 @@ include("../../root/DataTable.php");
 
 <style>
     /* Container Styling */
+ 
     .container {
         margin-top: 15px;
         border: 1px solid #ddd;
@@ -33,8 +34,8 @@ include("../../root/DataTable.php");
     }
 
     table#example thead {
-        background-color: #007bff;
-        color: white;
+        /* background-color: #f2f4f7ff; */
+        color: black;
     }
 
     table#example th,
@@ -179,8 +180,8 @@ include("../../root/DataTable.php");
 
 <h3 class="text-center">PAROLL SETTING</h3>
 <div class="container" style="margin-top: 15px; border: 0.4px solid #ccc;  padding: 20px; border-radius: 5px;">
-    <table border="1" class="display" id="example">
-        <button style="margin-bottom: 10px; background-color: #7a8086ff; color: #fff;  border-radius: 5px;"><i style="margin-right: 10px;" class="fas fa-plus"></i>
+    <table class="display" id="example">
+        <button class="btn btn-sm btn-success me-2" style="margin-bottom: 10px;"><i style="margin-right: 10px;" class="fas fa-plus"></i>
             <a href="create.php" style="text-decoration: none; color: #fff;">Add New</a></button>
         <thead>
             <tr>
@@ -207,7 +208,7 @@ include("../../root/DataTable.php");
             ?>
                 <tr>
                     <td>
-                        <button class=" editButton" data-bs-toggle="modal" data-bs-target="#updateModal"
+                        <button class="btn btn-sm btn-warning me-2 editButton" data-bs-toggle="modal" data-bs-target="#updateModal"
                             data-id="<?php echo $row['id']; ?>"
                             data-code="<?php echo $row['code']; ?>"
                             data-description="<?php echo $row['description']; ?>"
@@ -232,7 +233,7 @@ include("../../root/DataTable.php");
                             data-sunhours="<?php echo $row['sunhours']; ?>">
                             <i class="fas fa-edit"></i>
                         </button>
-                        <button onclick=" deleteCompany('<?php echo $row['id']; ?>')">
+                        <button class="btn btn-sm btn-danger me-2" onclick=" deleteCompany('<?php echo $row['id']; ?>')">
                             <i class="fas fa-trash"></i>
                         </button>
                     </td>

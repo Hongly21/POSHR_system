@@ -6,8 +6,6 @@ include('../../root/Header.php');
 
 ?>
 
-
-
 <body>
     <div class="container-fluid mt-4">
         <div class="row">
@@ -22,18 +20,18 @@ include('../../root/Header.php');
                         </div>
                     </div>
                     <div class="card-body">
-                        <form action="../../action/PROvertime/create.php" method="POST" id="overtimeForm" novalidate>
+                        <form id="overtimeForm">
                             <div class="row mb-3">
                                 <div class="col-md-6">
                                     <label class="form-label required">Employee</label>
                                     <select name="empcode" class="form-select" required id="empcode">
                                         <option value="">Select Employee</option>
-                                        <?php   
-                                        $sql="SELECT EmpCode, EmpName FROM hrstaffprofile ORDER BY EmpName";
-                                        $run=$con->query($sql);
-                                        while($row=$run->fetch_assoc()): ?>
+                                        <?php
+                                        $sql = "SELECT EmpCode, EmpName FROM hrstaffprofile ORDER BY EmpName";
+                                        $run = $con->query($sql);
+                                        while ($row = $run->fetch_assoc()): ?>
                                             <option value="<?php echo ($row['EmpCode']); ?>">
-                                                <?php echo($row['EmpName'] . ' (' . $row['EmpCode'] . ')'); ?>
+                                                <?php echo ($row['EmpName'] . ' (' . $row['EmpCode'] . ')'); ?>
                                             </option>
                                         <?php endwhile;
                                         ?>
@@ -74,7 +72,7 @@ include('../../root/Header.php');
                                 <textarea name="reason" class="form-control" rows="3" required></textarea>
                             </div>
                             <div class="d-flex justify-content-start gap-2">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="button" class="btn btn-primary" id="saveOvertime">
                                     <i class="fas fa-save me-2"></i>Save
                                 </button>
                                 <a href="index.php" class="btn btn-secondary">
@@ -87,37 +85,64 @@ include('../../root/Header.php');
             </div>
         </div>
     </div>
-
-
-    <!-- <script>
-        $(document).ready(function() {
-            $("#overtimeForm").on("submit", function(e) {
-                e.preventDefault();
-
-                // Validate required fields
-                if (!this.checkValidity()) {
-                    e.stopPropagation();
-                    $(this).addClass('was-validated');
-                    return;
-                }
-
-                // Additional validation for times
-                const fromTime = new Date(`2000-01-01 ${$("input[name='fromtime']").val()}`);
-                const toTime = new Date(`2000-01-01 ${$("input[name='totime']").val()}`);
-
-                if (fromTime >= toTime) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Invalid Times',
-                        text: 'End time must be after start time'
-                    });
-                    return;
-                }
-
-                // Submit the form
-                this.submit();
-            });
-
-        });
-    </script> -->
 </body>
+
+
+<script>
+    $(document).ready(function() {
+        $("#saveOvertime").click(function() {
+            var empcode = $("#empcode").val();
+            var ottype = $("select[name=ottype]").val();
+            var otdate = $("input[name=otdate]").val();
+            var fromtime = $("input[name=fromtime]").val();
+            var totime = $("input[name=totime]").val();
+            var reason = $("textarea[name=reason]").val();
+
+            $.ajax({
+                url: "../../action/PROvertime/create.php",
+                type: "POST",
+                data: {
+                    empcode: empcode,
+                    ottype: ottype,
+                    otdate: otdate,
+                    fromtime: fromtime,
+                    totime: totime,
+                    reason: reason
+                },
+                success: function(response) {
+                    if (response === "success") {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: 'Overtime has been created successfully!',
+                            showConfirmButton: false,
+                            timer: 1500,
+                        }).then(() => {
+                            window.location.href = "index.php";
+                        })
+                    } else if (response === "error") {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Failed to create overtime. Please try again.',
+                        })
+                    } else if (response === 'errortime') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'From Time must be less than To Time',
+                        })
+
+                    } else if (response === 'All field are required') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'All field are required',
+                        })
+                    }
+                }
+            })
+
+        })
+    })
+</script>

@@ -61,17 +61,22 @@ include '../../Config/conect.php';
         background-color: #0056b3;
     }
 </style>
+<script>
+    $(document).ready(function() {
+        $('#example1').DataTable();
+    });
+</script>
 <div class="container" style="margin-top: 15px; border: 0.4px solid #ccc;  padding: 20px; border-radius: 5px;">
     <?php
     $sql = "SELECT * FROM hrdepartment";
     $result = $con->query($sql);
     ?>
-    <table class="table" id="example">
+    <table class="table" id="example1">
         <thead>
             <tr>
                 <th>
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#departmentModal">
-                        <i style="margin-right: 5px;" class="fa fa-plus"></i> Add
+                    <button type="button" class="btn btn-sm btn-primary me-2" data-bs-toggle="modal" data-bs-target="#departmentModal">
+                        <i  class="fa fa-plus"></i> Add New
                     </button>
                 </th>
                 <th>DepartmentCode</th>
@@ -85,18 +90,20 @@ include '../../Config/conect.php';
             ?>
                 <tr>
                     <td>
-                        <button type="button" class="btn btn-primary editButton1" data-bs-toggle="modal" data-bs-target="#DepartmentupdateModal"
+                        <button type="button" class="btn btn-sm btn-warning me-2 editButton1" data-bs-toggle="modal" data-bs-target="#DepartmentupdateModal"
                             data-id="<?php echo $row['Code']; ?>"
                             data-name="<?php echo $row['Description']; ?>"
                             data-status="<?php echo $row['Status']; ?>">
                             <i class="fa fa-edit"></i>
                         </button>
-                        <button class="btn btn-danger" onclick="deleteCompanyd('<?php echo $row['Code']; ?>')"><i class="fa fa-trash"></i></button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteCompanyd('<?php echo $row['Code']; ?>')"><i class="fa fa-trash"></i></button>
 
                     </td>
                     <td><?php echo $row['Code']; ?></td>
                     <td><?php echo $row['Description']; ?></td>
-                    <td><?php echo $row['Status']; ?></td>
+                    <td>
+                        <span class="badge bg-<?php echo $row['Status'] === 'Active' ? 'success' : 'danger'; ?>"><?php echo $row['Status']; ?></span>
+                    </td>
                 </tr>
 
             <?php
@@ -179,7 +186,6 @@ include '../../Config/conect.php';
 
 <!-- for active on tab page -->
 <script>
-
     document.querySelectorAll('[data-bs-toggle="tab"]').forEach(tab => {
         tab.addEventListener('shown.bs.tab', function(event) {
             localStorage.setItem('activeTab', event.target.getAttribute('data-bs-target'));

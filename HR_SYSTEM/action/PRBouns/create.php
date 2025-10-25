@@ -1,26 +1,29 @@
-<?php   
+<?php
 
 include('../../Config/conect.php');
 
-$empcode= $_POST['EmpCode'];
-$bounustype = $_POST['BonusType'];
-$amount = $_POST['Amount'];
-$fromdate = $_POST['FromDate'];
-$todate = $_POST['ToDate'];
-$description = $_POST['Description'];
-$status = $_POST['Status'];
-$remark = $_POST['Remark'];
+$empcode = $_POST['empcode'];
+$bounustype = $_POST['bonustype'];
+$amount = $_POST['amount'];
+$fromdate = $_POST['fromdate'];
+$todate = $_POST['todate'];
+$description = $_POST['description'];
+$status = $_POST['status'];
+$remark = $_POST['remark'];
 
 
-$sql = "INSERT INTO prbonus (EmpCode, BonusType, Amount, FromDate, ToDate, Description, Status, Remark)
+if ($empcode && $bounustype && $amount && $fromdate && $todate && $status) {
+
+    $sql = "INSERT INTO prbonus (EmpCode, BonusType, Amount, FromDate, ToDate, Description, Status, Remark)
     VALUES ('$empcode', '$bounustype', '$amount', '$fromdate', '$todate', '$description', '$status', '$remark')";
 
-$run= $con->query($sql);
+    $run = $con->query($sql);
 
-if($run){
-    echo "success";
-}else{
-    echo "error" . $con->error;
+    if ($run) {
+        echo "success";
+    } else {
+        echo "error" . $con->error;
+    }
+}else {
+    echo "errorfield";
 }
-
-?>

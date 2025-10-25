@@ -12,7 +12,7 @@ include('../../root/Header.php');
                     <div class="card-header">
                         <div class="d-flex justify-content-between align-items-center">
                             <h4 class="mb-0">Allowance List</h4>
-                            <a href="create.php" class="btn btn-primary">
+                            <a href="create.php" class="btn btn-sm btn-primary me-2">
                                 <i class="fas fa-plus me-2"></i>New Allowance
                             </a>
                         </div>

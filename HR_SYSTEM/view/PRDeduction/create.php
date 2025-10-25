@@ -18,7 +18,7 @@ include('../../root/Header.php');
                         </div>
                     </div>
                     <div class="card-body">
-                        <form action="../../action/PRDeduction/create.php" method="POST" id="allowanceForm">
+                        <form id="allowanceForm">
                             <div class="row mb-3">
                                 <div class="col-md-4">
                                     <label for="EmpCode" class="form-label">Employee</label>
@@ -85,7 +85,7 @@ include('../../root/Header.php');
                             </div>
 
                             <div class="text-end">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="button" id="saveDed" class="btn btn-primary">
                                     <i class="fas fa-save me-2"></i>Save Deduction
                                 </button>
                             </div>
@@ -97,16 +97,37 @@ include('../../root/Header.php');
     </div>
     <script>
         $(document).ready(function() {
-            // Date validation
-            $('#FromDate, #ToDate').on('change', function() {
-                const fromDate = new Date($('#FromDate').val());
-                const toDate = new Date($('#ToDate').val());
-
-                if (fromDate && toDate && fromDate > toDate) {
-                    alert('To Date must be after From Date');
-                    $('#ToDate').val('');
-                }
+            $('#saveDed').click(function() {
+                var formData = $('#allowanceForm').serialize();
+                $.ajax({
+                    type: 'POST',
+                    url: '../../action/PRDeduction/create.php',
+                    data: formData,
+                    success: function(response) {
+                        if (response === 'success') {
+                            Swal.fire({
+                                title: 'Success',
+                                text: 'Deduction Created Successfully',
+                                icon: 'success',
+                                showConfirmButton: false,
+                                timer: 1500
+                            }).then(() => {
+                                window.location.href = 'index.php';
+                            });
+                        }else if(response === 'errorfield'){
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Please fill in all required fields!'
+                            });
+                        }
+                        else {
+                            alert('Error creating Deduction: ' + response);
+                        }
+                    }
+                });
             });
+
         });
     </script>
 </body>

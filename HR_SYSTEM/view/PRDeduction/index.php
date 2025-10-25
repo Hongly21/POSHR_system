@@ -12,7 +12,7 @@ include("../../root/Header.php");
                     <div class="card-header">
                         <div class="d-flex justify-content-between align-items-center">
                             <h4 class="mb-0">Deduction List</h4>
-                            <a href="create.php" class="btn btn-primary">
+                            <a href="create.php" class="btn btn-sm btn-success me-2">
                                 <i class="fas fa-plus me-2"></i>New Deduction
                             </a>
                         </div>
@@ -42,8 +42,8 @@ include("../../root/Header.php");
                                 ?>
                                     <tr>
                                         <td>
-                                            <a href="edit.php?id=<?php echo $row['ID']; ?>" class="btn btn-primary edit-button"><i class="fas fa-edit"></i></a>
-                                            <button type="button" class="btn btn-danger delete-button" onclick="deleteCompany('<?php echo $row['ID']; ?>')"><i class="fas fa-trash"></i></button>
+                                            <a href="edit.php?id=<?php echo $row['ID']; ?>" class="btn btn-sm btn-warning me-2 edit-button"><i class="fas fa-edit"></i></a>
+                                            <button type="button" class="btn btn-sm btn-danger me-2 delete-button" onclick="deleteCompany('<?php echo $row['ID']; ?>')"><i class="fas fa-trash"></i></button>
                                         </td>
                                         <td> <?php echo $row['EmpCode']; ?></td>
                                         <td>
@@ -76,36 +76,7 @@ include("../../root/Header.php");
 
 
 
-    <script>
-        $(document).ready(function() {
 
-
-            // Check for success/error messages
-            const urlParams = new URLSearchParams(window.location.search);
-            const successMsg = urlParams.get('success');
-            const errorMsg = urlParams.get('error');
-
-            if (successMsg) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success!',
-                    text: decodeURIComponent(successMsg),
-                    timer: 3000,
-                    timerProgressBar: true,
-                    showConfirmButton: false
-                });
-            } else if (errorMsg) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error!',
-                    text: decodeURIComponent(errorMsg),
-                    timer: 3000,
-                    timerProgressBar: true,
-                    showConfirmButton: false
-                });
-            }
-        });
-    </script>
 </body>
 
 <!-- //delete alert mesaages -->

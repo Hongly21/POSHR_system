@@ -73,8 +73,8 @@ include '../../Config/conect.php';
         <thead>
             <tr>
                 <th>
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addTaxRateModal">
-                        <i style="margin-right: 5px;" class="fa fa-plus"></i> Add
+                    <button type="button" class="btn btn-sm btn-success me-2" data-bs-toggle="modal" data-bs-target="#addTaxRateModal">
+                        <i style="margin-right: 5px;" class="fa fa-plus"></i> Add New
                     </button>
                 </th>
                 <th>AmountFrom</th>
@@ -89,7 +89,7 @@ include '../../Config/conect.php';
             ?>
                 <tr>
                     <td>
-                        <button type="button" data-bs-toggle="modal" data-bs-target="#updateTaxRateModal" class="btn btn-primary editButton"
+                        <button type="button" data-bs-toggle="modal" data-bs-target="#updateTaxRateModal" class="btn btn-sm btn-warning me-2 editButton"
                             data-id="<?php echo $row['id']; ?>"
                             data-amountfrom="<?php echo $row['AmountFrom']; ?>"
                             data-amountto="<?php echo $row['AmountTo']; ?>"
@@ -98,18 +98,21 @@ include '../../Config/conect.php';
 
                             <i class="fa fa-edit"></i>
                         </button>
-                        <button class="btn btn-danger" onclick="deletetax('<?php echo $row['id']; ?>')"><i class="fa fa-trash"></i></button>
+                        <button class="btn btn-sm btn-danger me-2" onclick="deletetax('<?php echo $row['id']; ?>')"><i class="fa fa-trash"></i></button>
                     </td>
                     <td> $ <?php echo $row['AmountFrom']; ?></td>
                     <td> $ <?php echo $row['AmountTo']; ?></td>
                     <td> <?php echo $row['rate']; ?> %</td>
-                    <td><?php if ($row['status'] == 1) {
-                            echo 'Active';
-                        } else {
-                            echo 'Inactive';
-                        }
-                        ?>
+                    <td>
+                        <span class="badge bg-<?php echo $row['status'] == 1 ? 'success' : 'danger'; ?>"><?php if ($row['status'] == 1) {
+                                                                                                                echo 'Active';
+                                                                                                            } else {
+                                                                                                                echo 'Inactive';
+                                                                                                            }
+                                                                                                            ?>
+                        </span>
                     </td>
+
                 </tr>
 
             <?php

@@ -73,8 +73,8 @@ include '../../Config/conect.php';
         <thead>
             <tr>
                 <th>
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addTaxRateModal">
-                        <i style="margin-right: 5px;" class="fa fa-plus"></i> Add
+                    <button type="button" class="btn btn-sm btn-success me-2" data-bs-toggle="modal" data-bs-target="#addTaxRateModal">
+                        <i style="margin-right: 5px;" class="fa fa-plus"></i> Add New
                     </button>
                 </th>
                 <th>Code</th>
@@ -89,13 +89,13 @@ include '../../Config/conect.php';
             ?>
                 <tr>
                     <td>
-                        <button type="button" data-bs-toggle="modal" data-bs-target="#updateTaxRateModal" class="btn btn-primary editButton"
+                        <button type="button" data-bs-toggle="modal" data-bs-target="#updateTaxRateModal" class="btn btn-sm btn-warning editButton"
                             data-code="<?php echo $row['Code']; ?>"
                             data-des="<?php echo $row['Des']; ?>"
                             data-rate="<?php echo $row['Rate']; ?>">
                             <i class="fa fa-edit"></i>
                         </button>
-                        <button class="btn btn-danger" onclick="deletetax('<?php echo $row['Code']; ?>')"><i class="fa fa-trash"></i></button>
+                        <button class="btn btn-sm btn-danger" onclick="deletetax('<?php echo $row['Code']; ?>')"><i class="fa fa-trash"></i></button>
                     </td>
                     <td><?php echo $row['Code']; ?></td>
                     <td><?php echo $row['Des']; ?></td>

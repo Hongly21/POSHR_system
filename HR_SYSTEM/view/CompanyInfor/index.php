@@ -1,4 +1,6 @@
-<?php include_once('../../root/Header.php'); ?>
+<?php include_once('../../root/Header.php');
+
+?>
 
 <body>
     <h2 style="text-align: center; margin-top: 10px; text-transform: uppercase;">Company Information</h2>

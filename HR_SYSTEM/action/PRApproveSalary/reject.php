@@ -7,6 +7,7 @@
    $result=$con->query($sql);
    if($result){
     echo "success";
+    header("location:../../view/PRApproveSalary/index.php?rejectedsuccess=$id");
    }
    else{
     echo "failed" . $con->error; 

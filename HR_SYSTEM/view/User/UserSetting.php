@@ -26,15 +26,15 @@ include("../../Config/conect.php");
                         <?php
                         if ($row['Username'] != "admin") {
                         ?>
-                        <button class="btn btn-danger btn-sm delete-user-btn" data-id="<?php echo $row['UserID']; ?>">
+                            <button class="btn btn-danger btn-sm delete-user-btn" data-id="<?php echo $row['UserID']; ?>">
                                 <i class="fas fa-trash"></i> Delete
                             </button>
-                           
+
                         <?php
                         }
                         ?>
                         <?php if (!isset($_SESSION['UserID']) || $row['UserID'] != $_SESSION['UserID']) { ?>
-                             <button class="btn btn-primary btn-sm edit-user-btn"
+                            <button class="btn btn-primary btn-sm edit-user-btn"
                                 data-id="<?php echo $row['UserID']; ?>"
                                 data-username="<?php echo $row['Username']; ?>"
                                 data-email="<?php echo $row['Email']; ?>"
@@ -46,7 +46,12 @@ include("../../Config/conect.php");
                     </td>
                     <td><?php echo htmlspecialchars($row['Username']); ?></td>
                     <td><?php echo htmlspecialchars($row['Email']); ?></td>
-                    <td><span class="badge bg-<?php echo $row['Role'] === 'admin' ? 'danger' : ($row['Role'] === 'manager' ? 'warning' : 'info'); ?>"><?php echo ucfirst($row['Role']); ?></span></td>
+                    <td>
+                        <span class="badge bg-<?php echo $row['Role'] === 'admin' ? 'danger' : ($row['Role'] === 'manager' ? 'warning' :
+                                                        'info'); ?>"><?php echo ucfirst($row['Role']);
+                                    ?>
+                        </span>
+                    </td>
                     <td><span class="badge bg-<?php echo $row['Status'] === 'active' ? 'success' : 'secondary'; ?>"><?php echo ucfirst($row['Status']); ?></span></td>
                     <td><?php echo !empty($row['LastLogin']) ? date('Y-m-d H:i', strtotime($row['LastLogin'])) : 'Never'; ?></td>
                 </tr>
@@ -387,6 +392,9 @@ include("../../Config/conect.php");
             const role = $('#edit_role').val();
             const status = $('#edit_status').val();
 
+            // Get current logged-in user ID from PHP session
+            const currentUserId = "<?php echo $_SESSION['UserID'] ?? ''; ?>";
+
             $.ajax({
                 url: "../../action/User/update.php",
                 type: "POST",
@@ -407,19 +415,19 @@ include("../../Config/conect.php");
                             const row = $(`button[data-id="${id}"]`).closest('tr');
                             userTable.row(row).data([
                                 `<div class="btn-group">
-                                <button class="btn btn-primary btn-sm edit-user-btn" 
-                                    data-id="${id}" 
-                                    data-username="${username}"
-                                    data-email="${email}"
-                                    data-role="${role}"
-                                    data-status="${status}">
-                                    <i class="fas fa-edit"></i> Edit
-                                </button>
-                                ${id != $_SESSION['UserID'] ? `
-                                <button class="btn btn-danger btn-sm delete-user-btn" data-id="${id}">
-                                    <i class="fas fa-trash"></i> Delete
-                                </button>` : ''}
-                            </div>`,
+                            <button class="btn btn-primary btn-sm edit-user-btn" 
+                                data-id="${id}" 
+                                data-username="${username}"
+                                data-email="${email}"
+                                data-role="${role}"
+                                data-status="${status}">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            ${id != currentUserId ? `
+                            <button class="btn btn-danger btn-sm delete-user-btn" data-id="${id}">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>` : ''}
+                        </div>`,
                                 username,
                                 email,
                                 `<span class="badge bg-${role === 'admin' ? 'danger' : (role === 'manager' ? 'warning' : 'info')}">${role}</span>`,
@@ -445,6 +453,7 @@ include("../../Config/conect.php");
                 }
             });
         });
+
 
         // Delete User
         $(document).on('click', '.delete-user-btn', function() {
@@ -483,556 +492,6 @@ include("../../Config/conect.php");
                         },
                         error: function(xhr) {
                             showToast('error', xhr.responseText || 'Error deleting user');
-                        }
-                    });
-                }
-            });
-        });
-
-        // Form validation
-        const forms = document.querySelectorAll('.needs-validation');
-        Array.from(forms).forEach(form => {
-            form.addEventListener('submit', event => {
-                if (!form.checkValidity()) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                }
-                form.classList.add('was-validated');
-            }, false);
-        });
-
-        // Input animation
-        $('.form-control').on('focus', function() {
-            $(this).closest('.input-group').addClass('focused');
-        }).on('blur', function() {
-            $(this).closest('.input-group').removeClass('focused');
-        });
-
-        // Helper function for showing toasts
-        function showToast(icon, title) {
-            const Toast = Swal.mixin({
-                toast: true,
-                position: "top-right",
-                showConfirmButton: false,
-                timer: 5000,
-                timerProgressBar: true,
-                didOpen: (toast) => {
-                    toast.onmouseenter = Swal.stopTimer;
-                    toast.onmouseleave = Swal.resumeTimer;
-                },
-                willClose: () => {
-                    $('.swal2-container').remove();
-                },
-                customClass: {
-                    popup: 'colored-toast',
-                    timerProgressBar: 'timer-progress'
-                },
-                iconColor: '#fff',
-                background: icon === 'success' ? '#4CAF50' : icon === 'error' ? '#F44336' : '#2196F3'
-            });
-            Toast.fire({
-                icon,
-                title
-            });
-        }
-    });
-</script>
-
-<style>
-    /* Form Styles */
-    .form-control:focus,
-    .form-select:focus {
-        border-color: #0d6efd;
-        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
-    }
-
-    .input-group.focused .input-group-text {
-        border-color: #0d6efd;
-        background-color: #e9ecef;
-    }
-
-    /* Table Styles */
-    .table {
-        vertical-align: middle;
-    }
-
-    .table th {
-        background-color: #f8f9fa;
-        font-weight: 600;
-    }
-
-    /* Badge Styles */
-    .badge {
-        font-size: 0.85em;
-        padding: 0.5em 0.85em;
-        text-transform: capitalize;
-    }
-
-    /* Button Styles */
-    .btn-group .btn {
-        margin: 0 2px;
-    }
-
-    /* Toast Styles */
-    .colored-toast {
-        border-radius: 8px !important;
-        color: #fff !important;
-    }
-
-    .timer-progress {
-        background: rgba(255, 255, 255, 0.3) !important;
-    }
-
-    /* Modal Styles */
-    .modal-content {
-        border-radius: 12px;
-    }
-
-    .modal-header {
-        border-top-left-radius: 12px;
-        border-top-right-radius: 12px;
-    }
-
-    /* Password Toggle Button */
-    .toggle-password {
-        border-top-right-radius: 4px !important;
-        border-bottom-right-radius: 4px !important;
-    }
-
-    /* DataTable Responsive Styles */
-    .dataTables_wrapper .row {
-        margin: 1rem 0;
-    }
-
-    .dataTables_filter,
-    .dataTables_length {
-        margin-bottom: 1rem;
-    }
-
-    .dataTables_info,
-    .dataTables_paginate {
-        margin-top: 1rem;
-    }
-
-    /* Custom Scrollbar */
-    ::-webkit-scrollbar {
-        width: 8px;
-        height: 8px;
-    }
-
-    ::-webkit-scrollbar-track {
-        background: #f1f1f1;
-        border-radius: 4px;
-    }
-
-    ::-webkit-scrollbar-thumb {
-        background: #888;
-        border-radius: 4px;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-        background: #555;
-    }
-</style>
-
-<style>
-    .dataTables_wrapper .dataTables_length select {
-        width: 60px;
-    }
-
-    .btn-sm {
-        padding: 0.25rem 0.5rem;
-        font-size: 0.75rem;
-        margin-right: 0.25rem;
-    }
-
-    .modal-header {
-        background-color: #f8f9fa;
-        border-bottom: 1px solid #dee2e6;
-    }
-
-    .modal-footer {
-        background-color: #f8f9fa;
-        border-top: 1px solid #dee2e6;
-    }
-
-    .colored-toast {
-        padding: 16px 24px !important;
-        color: white !important;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
-        border-radius: 8px !important;
-        font-size: 15px !important;
-        font-weight: 500 !important;
-        animation: slideInDown 0.3s ease-in-out !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: flex-start !important;
-        min-width: 300px !important;
-        max-width: 500px !important;
-        margin: 0 auto !important;
-    }
-
-    .colored-toast .swal2-icon {
-        margin: 0 12px 0 0 !important;
-        width: 28px !important;
-        height: 28px !important;
-        flex-shrink: 0 !important;
-    }
-
-    .colored-toast .swal2-title {
-        margin: 0 !important;
-        padding: 0 !important;
-        color: white !important;
-        text-align: left !important;
-        flex-grow: 1 !important;
-    }
-
-    .timer-progress {
-        background: rgba(255, 255, 255, 0.3) !important;
-        height: 3px !important;
-    }
-
-    @keyframes slideInDown {
-        from {
-            transform: translateY(-100%);
-            opacity: 0;
-        }
-
-        to {
-            transform: translateY(0);
-            opacity: 1;
-        }
-    }
-
-    /* Modern Form Styles */
-    .modal-content {
-        border-radius: 15px;
-    }
-
-    .modal-header {
-        padding: 1.5rem 1.75rem;
-    }
-
-    .modal-header .modal-title {
-        font-size: 1.25rem;
-        font-weight: 600;
-    }
-
-    .form-label {
-        font-size: 0.95rem;
-        margin-bottom: 0.5rem;
-        color: #444;
-    }
-
-    .input-group {
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
-        border-radius: 8px;
-    }
-
-    .input-group-text {
-        border-radius: 8px 0 0 8px;
-        border: 1px solid #dee2e6;
-        padding: 0.6rem 1rem;
-    }
-
-    .form-control {
-        border-radius: 0 8px 8px 0;
-        padding: 0.6rem 1rem;
-        border: 1px solid #dee2e6;
-        font-size: 0.95rem;
-    }
-
-    .form-control:focus {
-        box-shadow: none;
-        border-color: #86b7fe;
-    }
-
-    .input-group:focus-within {
-        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
-    }
-
-    .input-group:focus-within .input-group-text,
-    .input-group:focus-within .form-control {
-        border-color: #86b7fe;
-    }
-
-    .btn {
-        padding: 0.6rem 1.5rem;
-        border-radius: 8px;
-        transition: all 0.3s ease;
-    }
-
-    .btn-primary {
-        background-color: #0d6efd;
-        border: none;
-    }
-
-    .btn-primary:hover {
-        background-color: #0b5ed7;
-        transform: translateY(-1px);
-    }
-
-    .btn-light {
-        background-color: #f8f9fa;
-        border: 1px solid #dee2e6;
-    }
-
-    .btn-light:hover {
-        background-color: #e9ecef;
-        border-color: #dee2e6;
-    }
-
-    .invalid-feedback {
-        font-size: 0.85rem;
-        margin-top: 0.5rem;
-    }
-
-    /* Animation for modal */
-    .modal.fade .modal-dialog {
-        transition: transform 0.3s ease-out;
-    }
-
-    .modal.fade .modal-content {
-        transform: scale(0.95);
-        transition: transform 0.3s ease-out;
-    }
-
-    .modal.show .modal-content {
-        transform: scale(1);
-    }
-</style>
-
-<script>
-    $(document).ready(function() {
-        // Initialize DataTable for Tax Settings
-        let taxSettingTable;
-        if (!$.fn.DataTable.isDataTable('#TaxSettingTable')) {
-            taxSettingTable = $('#TaxSettingTable').DataTable({
-                responsive: true,
-                lengthChange: true,
-                autoWidth: false,
-                order: [
-                    [1, 'asc']
-                ] // Sort by Amount From by default
-            });
-        } else {
-            taxSettingTable = $('#TaxSettingTable').DataTable();
-        }
-
-        // Add new Tax setting
-        $('#saveTaxSetting').click(function() {
-            if (!$('#addTaxSettingForm')[0].checkValidity()) {
-                $('#addTaxSettingForm')[0].reportValidity();
-                return;
-            }
-
-            const amountFrom = parseFloat($('#amountFrom').val());
-            const amountTo = parseFloat($('#amountTo').val());
-            const rate = parseFloat($('#taxRate').val());
-
-            if (amountFrom >= amountTo) {
-                showToast('error', 'Amount From must be less than Amount To');
-                return;
-            }
-
-            if (rate < 0 || rate > 100) {
-                showToast('error', 'Tax rate must be between 0 and 100');
-                return;
-            }
-
-            $.ajax({
-                url: "../../action/TaxSetting/create.php",
-                type: "POST",
-                data: {
-                    type: "TaxSetting",
-                    amountFrom: amountFrom,
-                    amountTo: amountTo,
-                    rate: rate,
-                    status: $('#taxStatus').val()
-                },
-                success: function(response) {
-                    try {
-                        const jsonResponse = typeof response === 'string' ? JSON.parse(response) : response;
-                        if (jsonResponse.status === 'success') {
-                            // Add new row to DataTable
-                            taxSettingTable.row.add([
-                                `<div class="btn-group">
-                                <button class="btn btn-primary btn-sm edit-tax-setting-btn" 
-                                    data-id="${jsonResponse.id}" 
-                                    data-amount-from="${$('#amountFrom').val()}"
-                                    data-amount-to="${$('#amountTo').val()}"
-                                    data-rate="${$('#taxRate').val()}"
-                                    data-status="1">
-                                    <i class="fas fa-edit"></i> Edit
-                                </button>
-                                <button class="btn btn-danger btn-sm delete-tax-setting-btn" data-id="${jsonResponse.id}">
-                                    <i class="fas fa-trash"></i> Delete
-                                </button>
-                            </div>`,
-                                $('#amountFrom').val(),
-                                $('#amountTo').val(),
-                                $('#taxRate').val(),
-                                `<div class="form-check form-switch">
-                                <input class="form-check-input status-toggle" type="checkbox" 
-                                    data-id="${jsonResponse.id}" checked>
-                            </div>`
-                            ]).draw(false);
-
-                            // Hide modal and clean up
-                            $('#addTaxSettingModal').modal('hide');
-                            $('body').removeClass('modal-open');
-                            $('.modal-backdrop').remove();
-
-                            // Clear form
-                            $('#amountFrom').val('');
-                            $('#amountTo').val('');
-                            $('#taxRate').val('');
-
-                            showToast('success', jsonResponse.message || 'Tax setting added successfully');
-                        } else {
-                            showToast('error', jsonResponse.message || 'Error adding tax setting');
-                        }
-                    } catch (e) {
-                        showToast('error', 'Error processing server response');
-                    }
-                },
-                error: function(xhr) {
-                    showToast('error', xhr.responseText || 'Error adding tax setting');
-                }
-            });
-        });
-
-        // Edit button click handler for Tax Settings
-        $(document).on('click', '.edit-tax-setting-btn', function() {
-            const id = $(this).data('id');
-            const amountFrom = $(this).data('amount-from');
-            const amountTo = $(this).data('amount-to');
-            const rate = $(this).data('rate');
-            const status = $(this).data('status');
-
-            $('#edit_tax_id').val(id);
-            $('#edit_amount_from').val(amountFrom);
-            $('#edit_amount_to').val(amountTo);
-            $('#edit_rate').val(rate);
-            $('#edit_status').val(status);
-
-            $('#editTaxSettingModal').modal('show');
-        });
-
-        // Update Tax setting
-        $('#updateTaxSetting').click(function() {
-            if (!$('#editTaxSettingForm')[0].checkValidity()) {
-                $('#editTaxSettingForm')[0].reportValidity();
-                return;
-            }
-
-            const id = $('#edit_tax_id').val();
-            const amountFrom = parseFloat($('#edit_amount_from').val());
-            const amountTo = parseFloat($('#edit_amount_to').val());
-            const rate = parseFloat($('#edit_rate').val());
-            const status = $('#edit_status').val();
-
-            if (amountFrom >= amountTo) {
-                showToast('error', 'Amount From must be less than Amount To');
-                return;
-            }
-
-            if (rate < 0 || rate > 100) {
-                showToast('error', 'Tax rate must be between 0 and 100');
-                return;
-            }
-
-            $.ajax({
-                url: "../../action/TaxSetting/update.php",
-                type: "POST",
-                data: {
-                    type: "TaxSetting",
-                    id: id,
-                    amountFrom: amountFrom,
-                    amountTo: amountTo,
-                    rate: rate,
-                    status: status
-                },
-                success: function(response) {
-                    try {
-                        const jsonResponse = typeof response === 'string' ? JSON.parse(response) : response;
-                        if (jsonResponse.status === 'success') {
-                            // Update row in DataTable
-                            const row = $(`button[data-id="${id}"]`).closest('tr');
-                            taxSettingTable.row(row).data([
-                                `<button class="btn btn-primary btn-sm edit-tax-setting-btn" 
-                                data-id="${id}" 
-                                data-amount-from="${amountFrom}"
-                                data-amount-to="${amountTo}"
-                                data-rate="${rate}"
-                                data-status="${status}">
-                                <i class="fas fa-edit"></i> Edit
-                            </button>
-                            <button class="btn btn-danger btn-sm delete-tax-setting-btn" data-id="${id}">
-                                <i class="fas fa-trash"></i> Delete
-                            </button>`,
-                                amountFrom,
-                                amountTo,
-                                rate,
-                                status == 1 ? 'Active' : 'Inactive'
-                            ]).draw(false);
-
-                            // Hide modal and clean up
-                            $('#editTaxSettingModal').modal('hide');
-                            $('body').removeClass('modal-open');
-                            $('.modal-backdrop').remove();
-
-                            showToast('success', jsonResponse.message || 'Tax setting updated successfully');
-                        } else {
-                            showToast('error', jsonResponse.message || 'Error updating tax setting');
-                        }
-                    } catch (e) {
-                        showToast('error', 'Error processing server response');
-                    }
-                },
-                error: function(xhr) {
-                    showToast('error', xhr.responseText || 'Error updating tax setting');
-                }
-            });
-        });
-
-        // Delete Tax Setting
-        $(document).on('click', '.delete-tax-setting-btn', function() {
-            const row = $(this).closest('tr');
-            const id = $(this).data('id');
-
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url: "../../action/TaxSetting/delete.php",
-                        type: "POST",
-                        data: {
-                            type: "TaxSetting",
-                            id: id
-                        },
-                        success: function(response) {
-                            try {
-                                const jsonResponse = typeof response === 'string' ? JSON.parse(response) : response;
-                                if (jsonResponse.status === 'success') {
-                                    taxSettingTable.row(row).remove().draw(false);
-                                    showToast('success', jsonResponse.message || 'Tax setting deleted successfully');
-                                } else {
-                                    showToast('error', jsonResponse.message || 'Error deleting tax setting');
-                                }
-                            } catch (e) {
-                                showToast('error', 'Error processing server response');
-                            }
-                        },
-                        error: function(xhr) {
-                            showToast('error', xhr.responseText || 'Error deleting tax setting');
                         }
                     });
                 }

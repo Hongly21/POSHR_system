@@ -1,12 +1,11 @@
 <?php include('../../root/Header.php');
 include('../../Config/conect.php'); ?>
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Career History</title>
 
-    <!-- Career History CSS -->
-    <link href="../../style/career.css" rel="stylesheet">
 </head>
 
 <body>
@@ -21,7 +20,7 @@ include('../../Config/conect.php'); ?>
                         </div>
                     </div>
                     <div class="card-body">
-                        <form id="careerHistoryForm"  method="POST">
+                        <form id="careerHistoryForm" method="POST">
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="mb-3">
@@ -35,8 +34,7 @@ include('../../Config/conect.php'); ?>
                                             ?>
                                                 <option value="<?php echo $row['EmpCode']; ?>"><?php echo $row['EmpCode'] . ' - ' . $row['EmpName']; ?></option>
                                             <?php
-                                                // echo "<option value='" . htmlspecialchars($row['EmpCode']) . "'>" .
-                                                //     htmlspecialchars($row['EmpCode'] . ' - ' . $row['EmpName']) . "</option>";
+
                                             }
                                             ?>
                                         </select>
@@ -111,21 +109,6 @@ include('../../Config/conect.php'); ?>
                                             <option value="RESIGN">Resign</option>
                                             <option value="INCREASE">Increase Salary</option>
 
-                                            <?php
-                                            // $careerCodes = [
-                                            //     'NEW' => 'New Join',
-                                            //     'PROMOTE' => 'Promote',
-                                            //     'TRANSFER' => 'Transfer',
-                                            //     'RESIGN' => 'Resign',
-                                            //     'INCREASE' => 'Increase Salary'
-                                            // ];
-                                            // foreach ($careerCodes as $code => $label) {
-                                            //     $badgeClass = 'badge-' . strtolower($code);
-                                            //     echo "
-                                            //     <option value='{$code}' class='{$badgeClass}' >{$label}</option>
-                                            //     ";
-                                            // }
-                                            ?>
                                         </select>
                                     </div>
                                 </div>

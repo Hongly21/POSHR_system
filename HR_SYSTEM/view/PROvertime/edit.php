@@ -29,17 +29,17 @@ while ($row = $run->fetch_assoc()) {
                         </div>
                     </div>
                     <div class="card-body">
-                        <form action="../../action/PROvertime/update.php" method="POST" id="overtimeForm" novalidate>
+                        <form id="overtimeForm">
                             <div class="row mb-3">
                                 <div class="col-md-6">
                                     <label class="form-label required">Employee</label>
                                     <select name="empcode" class="form-select" required id="empcode" readonly>
-                                        <option value=""><?php
-                                                            $sql2 = "SELECT EmpName FROM hrstaffprofile WHERE EmpCode='$empcode'";
-                                                            $run2 = $con->query($sql2);
-                                                            $row2 = $run2->fetch_assoc();
-                                                            echo $row2['EmpName'] . ' (' . $empcode . ')';
-                                                            ?></option>
+                                        <option value="<?php echo $empcode; ?>"><?php
+                                                                                $sql2 = "SELECT EmpName FROM hrstaffprofile WHERE EmpCode='$empcode'";
+                                                                                $run2 = $con->query($sql2);
+                                                                                $row2 = $run2->fetch_assoc();
+                                                                                echo $row2['EmpName'] . ' (' . $empcode . ')';
+                                                                                ?></option>
                                         <input type="hidden" name="id" id="id" value="<?php echo $id; ?>">
 
                                     </select>
@@ -47,14 +47,15 @@ while ($row = $run->fetch_assoc()) {
                                 <div class="col-md-6">
                                     <label class="form-label required">OT Type</label>
                                     <select name="ottype" class="form-select" required>
-                                        <option value="<?php 
-                                        echo $ottype;
-                                        ?>"><?php
-                                                            $sql3 = "SELECT Des FROM protrate WHERE Code='$ottype'";
-                                                            $run3 = $con->query($sql3);
-                                                            $row3 = $run3->fetch_assoc();
-                                                            echo $row3['Des'] . ' (' . $ottype . ')';
-                                                            ?></option>
+                                        <option value="<?php
+                                                        echo $ottype;
+                                                        ?>">
+                                            <?php
+                                            $sql3 = "SELECT Des FROM protrate WHERE Code='$ottype'";
+                                            $run3 = $con->query($sql3);
+                                            $row3 = $run3->fetch_assoc();
+                                            echo $row3['Des'] . ' (' . $ottype . ')';
+                                            ?></option>
                                         <?php
                                         $otTypeQuery = "SELECT Code, Des, Rate FROM protrate ORDER BY Code";
                                         $otTypeResult = $con->query($otTypeQuery);
@@ -86,10 +87,10 @@ while ($row = $run->fetch_assoc()) {
                                 <textarea name="reason" class="form-control" rows="3" required> <?php echo $reason; ?></textarea>
                             </div>
                             <div class="d-flex justify-content-start gap-2">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="button" class="btn btn-primary" id="saveOvertime">
                                     <i class="fas fa-save me-2"></i>Save
                                 </button>
-                                <a href="index.php" class="btn btn-secondary">
+                                <a href="index.php" class="btn btn-secondary ">
                                     <i class="fas fa-times me-2"></i>Cancel
                                 </a>
                             </div>
@@ -99,37 +100,61 @@ while ($row = $run->fetch_assoc()) {
             </div>
         </div>
     </div>
-
-
-    <!-- <script>
-        $(document).ready(function() {
-            $("#overtimeForm").on("submit", function(e) {
-                e.preventDefault();
-
-                // Validate required fields
-                if (!this.checkValidity()) {
-                    e.stopPropagation();
-                    $(this).addClass('was-validated');
-                    return;
-                }
-
-                // Additional validation for times
-                const fromTime = new Date(`2000-01-01 ${$("input[name='fromtime']").val()}`);
-                const toTime = new Date(`2000-01-01 ${$("input[name='totime']").val()}`);
-
-                if (fromTime >= toTime) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Invalid Times',
-                        text: 'End time must be after start time'
-                    });
-                    return;
-                }
-
-                // Submit the form
-                this.submit();
-            });
-
-        });
-    </script> -->
 </body>
+
+
+<script>
+    $(document).ready(function() {
+        $('#saveOvertime').click(function() {
+            var id = $('#id').val();
+            var empcode = $('#empcode').val();
+            var ottype = $('select[name=ottype]').val();
+            var otdate = $('input[name=otdate]').val();
+            var fromtime = $('input[name=fromtime]').val();
+            var totime = $('input[name=totime]').val();
+            var reason = $('textarea[name=reason]').val();
+
+
+            $.ajax({
+                url: "../../action/PROvertime/update.php",
+                type: "POST",
+                data: {
+                    id: id,
+                    empcode: empcode,
+                    ottype: ottype,
+                    otdate: otdate,
+                    fromtime: fromtime,
+                    totime: totime,
+                    reason: reason
+                },
+                success: function(response) {
+                    if (response === "success") {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: 'Overtime has been updated successfully!',
+                            showConfirmButton: false,
+                            timer: 1500,
+                        }).then(() => {
+                            window.location.href = "index.php";
+                        })
+                    } else if (response === "error") {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Failed to update overtime. Please try again.',
+                        })
+                    } else if (response === 'errortime') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'From Time must be less than To Time',
+                        })
+
+                    }
+
+                }
+            })
+        })
+    })
+</script>

@@ -70,8 +70,8 @@ include '../../Config/conect.php';
         <thead>
             <tr>
                 <th>
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addLeaveTypeModal">
-                        <i style="margin-right: 5px;" class="fa fa-plus"></i> Add
+                    <button type="button" class="btn btn-sm btn-success me-2" data-bs-toggle="modal" data-bs-target="#addLeaveTypeModal">
+                        <i style="margin-right: 5px;" class="fa fa-plus"></i> Add New
                     </button>
                 </th>
                 <th>Leave Code</th>
@@ -87,7 +87,7 @@ include '../../Config/conect.php';
             ?>
                 <tr>
                     <td>
-                        <button type="button" data-bs-toggle="modal" data-bs-target="#updateLeaveTypeModal" class="btn btn-primary editButton"
+                        <button type="button" data-bs-toggle="modal" data-bs-target="#updateLeaveTypeModal" class="btn btn-sm btn-warning me-2 editButton"
                             data-code="<?php echo $row['Code']; ?>"
                             data-leaveType="<?php echo $row['LeaveType']; ?>"
                             data-isprobation="<?php echo $row['IsProbation']; ?>"
@@ -96,7 +96,7 @@ include '../../Config/conect.php';
 
                             <i class="fa fa-edit"></i>
                         </button>
-                        <button class="btn btn-danger" onclick="deleteLeaveType('<?php echo $row['Code']; ?>')"><i class="fa fa-trash"></i></button>
+                        <button class="btn btn-sm btn-danger me-2" onclick="deleteLeaveType('<?php echo $row['Code']; ?>')"><i class="fa fa-trash"></i></button>
                     </td>
                     <td><?php echo $row['Code']; ?></td>
                     <td><?php echo $row['LeaveType']; ?></td>

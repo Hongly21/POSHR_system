@@ -70,6 +70,27 @@ include('../../root/Header.php');
         </tbody>
     </table>
 </div>
+<?php
+if (isset($_GET['approvedsuccess'])) {
+    echo "<script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: 'Salary Approved Successfully',
+            showConfirmButton: true
+        })
+    </script>";
+}elseif (isset($_GET['rejectedsuccess'])) {
+    echo "<script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: 'Salary Rejected Successfully',
+            showConfirmButton: true
+        })
+    </script>";
+}
+?>
 
 <script>
     $(document).ready(function() {

@@ -1,7 +1,6 @@
 <?php
 include("../../Config/conect.php");
 include("../../root/Header.php");
-include("../../root/DataTable.php");
 ?>
 <style>
     /* Base Reset and Typography */
@@ -203,7 +202,7 @@ include("../../root/DataTable.php");
                     </select>
                 </div>
             </div>
-            <button type="button" class="btnsubmit">Submit</button>
+            <button type="button" class="btnsubmit">Add</button>
             <button><a href="index.php" style="text-decoration: none; color: #fff;">Back</a></button>
         </form>
     </div>

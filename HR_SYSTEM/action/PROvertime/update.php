@@ -9,10 +9,7 @@ $totime = $_POST['totime'];
 $reason = $_POST['reason'];
 
 if ($fromtime >= $totime) {
-    echo "
-    <script>alert('From Time must be less than To Time');</script>";
-    //after alert it still stay on the same page
-    echo "<script>window.history.back();</script>";
+    echo "errortime";
 } elseif ($fromtime < $totime) {
     $hour = (strtotime($totime) - strtotime($fromtime)) / 3600;
     $sql = "UPDATE provertime SET OTType='$ottype', OTDate='$otdate', FromTime='$fromtime', ToTime='$totime', hour='$hour', Reason='$reason' WHERE ID='$id'";
@@ -24,3 +21,4 @@ if ($fromtime >= $totime) {
         echo "error" . $con->error;
     }
 }
+?>

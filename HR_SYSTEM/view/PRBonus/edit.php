@@ -32,7 +32,7 @@ while ($row = $run->fetch_assoc()) {
                         </div>
                     </div>
                     <div class="card-body">
-                        <form action="../../action/PRBouns/update.php" method="POST" id="allowanceForm">
+                        <form id="allowanceForm">
                             <div class="row mb-3">
                                 <div class="col-md-4">
                                     <label for="EmpCode" class="form-label">Employee</label>
@@ -96,7 +96,7 @@ while ($row = $run->fetch_assoc()) {
                             </div>
 
                             <div class="text-end">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="button" id="updateBonus" class="btn btn-primary">
                                     <i class="fas fa-save me-2"></i>Update Bouns
                                 </button>
                             </div>
@@ -108,16 +108,31 @@ while ($row = $run->fetch_assoc()) {
     </div>
     <script>
         $(document).ready(function() {
-            // Date validation
-            $('#FromDate, #ToDate').on('change', function() {
-                const fromDate = new Date($('#FromDate').val());
-                const toDate = new Date($('#ToDate').val());
+            $('#updateBonus').click(function() {
+                var data = $('#allowanceForm').serialize();
 
-                if (fromDate && toDate && fromDate > toDate) {
-                    alert('To Date must be after From Date');
-                    $('#ToDate').val('');
-                }
-            });
+                $.ajax({
+                    type: 'POST',
+                    url: '../../action/PRBouns/update.php',
+                    data: data,
+                    success: function(response) {
+                        if (response === 'success') {
+                            Swal.fire({
+                                title: 'Success',
+                                text: 'Bouns Updated Successfully',
+                                icon: 'success',
+                                showConfirmButton: false,
+                                timer: 1500
+                            }).then(() => {
+                                window.location.href = 'index.php';
+                            });
+                        } else {
+                            alert('Error updating Bouns: ' + response);
+                        }
+                    }
+                });
+
+            })
         });
     </script>
 </body>

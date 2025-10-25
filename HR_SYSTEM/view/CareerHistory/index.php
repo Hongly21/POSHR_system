@@ -1,9 +1,11 @@
 <?php
 include('../../Config/conect.php');
 include('../../root/Header.php');
+include('../../root/DataTable.php');
 
 
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,7 +14,7 @@ include('../../root/Header.php');
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Career History</title>
 
-    <link href="../../style/career.css" rel="stylesheet">
+    <!-- <link href="../../style/career.css" rel="stylesheet"> -->
 
     <style>
         .dropdown-menu {
@@ -31,6 +33,11 @@ include('../../root/Header.php');
         }
     </style>
 </head>
+<script>
+    $(document).ready(function() {
+        $('#careerHistoryTable').DataTable();
+    });
+</script>
 
 <body>
     <div class="container-fluid mt-4 mb-4">
@@ -41,9 +48,9 @@ include('../../root/Header.php');
                         <div class="d-flex justify-content-between align-items-center">
                             <h4 class="mb-0">Career History List</h4>
                             <div class="d-flex gap-2">
-                                <a href="create.php" class="btn btn-primary">
+                                <!-- <a href="create.php" class="btn btn-primary">
                                     <i class="fas fa-plus me-2"></i>Create New
-                                </a>
+                                </a> -->
                                 <!-- export -->
                                 <div class="dropdown">
                                     <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -97,13 +104,22 @@ include('../../root/Header.php');
                                 while ($row = $run->fetch_array()) {
                                 ?>
                                     <tr>
+                                  <td>
+    <a href="edit.php?empid=<?= $row['EmployeeID']; ?>" class="btn btn-sm btn-warning me-2">
+        <i class="far fa-edit"></i>
+    </a>
+    <button class="btn btn-sm btn-danger" onclick="deleteLeaveType('<?= $row['EmployeeID']; ?>')">
+        <i class="far fa-trash-alt"></i>
+    </button>
+</td>
                                         <td>
-                                            <a href="edit.php? empid=<?php echo $row['EmployeeID']; ?>"> <button class="btn btn-primary"> <i class="far fa-edit"></i></button>
-                                            </a>
-                                            <button class="btn btn-danger" onclick="deleteLeaveType('<?php echo $row['EmployeeID']; ?>')"><i class="far fa-trash-alt"></i></button>
-
+                                            <span class="badge bg-<?php
+                                                                    echo $row['CareerHistoryType'] === 'RESIGN' ? 'danger' : ($row['CareerHistoryType'] === 'TRANSFER' ? 'warning' : ($row['CareerHistoryType'] === 'PROMOTE' ? 'success' : ($row['CareerHistoryType'] === 'NEW' ? 'info' : ($row['CareerHistoryType'] === 'INCREASE' ? 'primary' : 'secondary'))));
+                                                                    ?>">
+                                                <?php echo $row['CareerHistoryType']; ?>
+                                            </span>
                                         </td>
-                                        <td><?php echo $row['CareerHistoryType']; ?></td>
+
                                         <td><?php echo $row['EmployeeID']; ?></td>
                                         <td>
                                             <?php

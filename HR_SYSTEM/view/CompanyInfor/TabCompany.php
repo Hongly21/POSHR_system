@@ -70,8 +70,8 @@ include '../../Config/conect.php';
         <thead>
             <tr>
                 <th>
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                        <i style="margin-right: 5px;" class="fa fa-plus"></i> Add
+                    <button type="button" class="btn btn-sm btn-primary me-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        <i class="fa fa-plus"></i> Add New
                     </button>
                 </th>
                 <th>CompanyCode</th>
@@ -85,20 +85,22 @@ include '../../Config/conect.php';
             ?>
                 <tr>
                     <td>
-                        <button type="button" class="btn btn-primary editButton" data-bs-toggle="modal" data-bs-target="#updateModal"
+                        <button type="button" class="btn btn-sm btn-warning me-2 editButton" data-bs-toggle="modal" data-bs-target="#updateModal"
                             data-id="<?php echo $row['Code']; ?>"
                             data-name="<?php echo $row['Description']; ?>"
                             data-status="<?php echo $row['Status']; ?>">
                             <i class="fa fa-edit"></i>
                         </button>
-                        <button class="btn btn-danger" onclick="deleteCompanyc('<?php echo $row['Code']; ?>')"><i class="fa fa-trash"></i></button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteCompanyc('<?php echo $row['Code']; ?>')"><i class="fa fa-trash"></i></button>
 
                     </td>
 
 
                     <td><?php echo $row['Code']; ?></td>
                     <td><?php echo $row['Description']; ?></td>
-                    <td><?php echo $row['Status']; ?></td>
+                    <td>
+                        <span class="badge bg-<?php echo $row['Status'] === 'Active' ? 'success' : 'danger'; ?>"><?php echo $row['Status']; ?></span>
+                    </td>
                 </tr>
 
             <?php
@@ -111,9 +113,7 @@ include '../../Config/conect.php';
     </table>
 </div>
 
-
 <!-- Button trigger modal -->
-
 
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

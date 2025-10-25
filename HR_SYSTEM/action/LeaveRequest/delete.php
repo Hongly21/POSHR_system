@@ -1,7 +1,7 @@
 <?php
 include("../../Config/conect.php");
 
-$id = $_GET['id'];
+$id = $_GET['Code'];
 
 $sql = "DELETE FROM lmleaverequest WHERE ID=$id";
 $run = $con->query($sql);

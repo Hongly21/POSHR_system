@@ -1,31 +1,9 @@
 <?php
 include("../../Config/conect.php");
+include('../../root/Header.php');
 
 ?>
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Leave Request</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Select2 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet">
-    <!-- SweetAlert2 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="../../style/career.css" rel="stylesheet">
-    <style>
-        .required:after {
-            content: " *";
-            color: red;
-        }
-    </style>
-</head>
 
 <body>
     <div class="container-fluid mt-4">
@@ -57,7 +35,7 @@ include("../../Config/conect.php");
                     }
                     ?>
                     <div class="card-body">
-                        <form id="leaveRequestForm" action="../../action/LeaveRequest/edit.php" method="POST" novalidate>
+                        <form id="leaveRequestForm">
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="mb-3">
@@ -106,14 +84,14 @@ include("../../Config/conect.php");
                                 <div class="col-12">
                                     <div class="mb-3">
                                         <label for="reason" class="form-label required">Reason</label>
-                                        <input type="hidden" name="id" value="<?php echo $id; ?>" >
+                                        <input type="hidden" id="id" name="id" value="<?php echo $id; ?>">
                                         <textarea class="form-control" id="reason" name="reason" rows="3" value="<?php echo $reason ?>" required><?php echo $reason; ?></textarea>
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-12">
-                                    <button type="submit" class="btn btn-primary">
+                                    <button type="button" class="btn btn-primary btnupdate">
                                         <i class="fas fa-save me-2"></i>Submit Request
                                     </button>
                                 </div>
@@ -126,12 +104,67 @@ include("../../Config/conect.php");
     </div>
 
 
-    <!-- Scripts -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 </body>
 
 </html>
+<script>
+    $(document).ready(function() {
+        $('.btnupdate').click(function(e) {
+            e.preventDefault(); // ✅ stop default reload
+
+            var id = $('#id').val();
+            var fromDate = $('#fromDate').val();
+            var toDate = $('#toDate').val();
+            var reason = $('#reason').val();
+
+            $.ajax({
+                url: '../../action/LeaveRequest/edit.php',
+                method: 'POST',
+                data: {
+                    action: 'btnupdate',
+                    id: id,
+                    fromDate: fromDate,
+                    toDate: toDate,
+                    reason: reason,
+                },
+                success: function(response) {
+                    console.log(response); // ✅ debug
+                    response = response.trim(); // ✅ fix spacing issue
+
+                    if (response === 'success') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: 'Leave request updated successfully',
+                            showConfirmButton: true
+                        }).then(() => {
+                            window.location.href = '../../view/LeaveRequest/index.php';
+                        });
+                    } else if (response === 'Already Approved or Rejected') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Cannot update leave request',
+                            text: 'This request is already approved or rejected.',
+                            showConfirmButton: true
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: response,
+                            showConfirmButton: true
+                        });
+                    }
+                },
+                error: function(error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Something went wrong: ' + error,
+                        showConfirmButton: true
+                    });
+                }
+            });
+        });
+    });
+</script>

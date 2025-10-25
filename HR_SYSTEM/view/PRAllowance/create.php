@@ -18,7 +18,7 @@ include('../../root/Header.php');
                         </div>
                     </div>
                     <div class="card-body">
-                        <form action="../../action/PRAllowance/create.php" method="POST" id="allowanceForm">
+                        <form id="allowanceForm">
                             <div class="row mb-3">
                                 <div class="col-md-4">
                                     <label for="EmpCode" class="form-label">Employee</label>
@@ -88,7 +88,7 @@ include('../../root/Header.php');
                             </div>
 
                             <div class="text-end">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="button" class="btn btn-primary" id="saveAllowance">
                                     <i class="fas fa-save me-2"></i>Save Allowance
                                 </button>
                             </div>
@@ -98,18 +98,57 @@ include('../../root/Header.php');
             </div>
         </div>
     </div>
-    <script>
-        $(document).ready(function() {
-            // Date validation
-            $('#FromDate, #ToDate').on('change', function() {
-                const fromDate = new Date($('#FromDate').val());
-                const toDate = new Date($('#ToDate').val());
-
-                if (fromDate && toDate && fromDate > toDate) {
-                    alert('To Date must be after From Date');
-                    $('#ToDate').val('');
-                }
-            });
-        });
-    </script>
 </body>
+
+
+<script>
+    $(document).ready(function() {
+        $('#saveAllowance').click(function() {
+            var empcode = $('#EmpCode').val();
+            var allowanceType = $('#AllowanceType').val();
+            var amount = $('#Amount').val();
+            var fromDate = $('#FromDate').val();
+            var toDate = $('#ToDate').val();
+            var status = $('#Status').val();
+            var description = $('#Description').val();
+            var remark = $('#Remark').val();
+
+
+            $.ajax({
+                url: '../../action/PRAllowance/create.php',
+                method: 'POST',
+                data: {
+                    empcode: empcode,
+                    allowanceType: allowanceType,
+                    amount: amount,
+                    fromDate: fromDate,
+                    toDate: toDate,
+                    status: status,
+                    description: description,
+                    remark: remark
+                },
+                success: function(response) {
+                    if (response == 'success') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: 'Allowance created successfully!'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = 'index.php';
+                            }
+                        })
+                    } else if (response == 'errorfield') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Please fill in all required fields!'
+                        })
+                    } else if (response == 'error') {
+                        alert('Something went wrong! Please try again.');
+                    }
+                }
+            })
+        })
+    })
+</script>

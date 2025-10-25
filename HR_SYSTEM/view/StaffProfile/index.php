@@ -72,7 +72,7 @@ include '../../Config/conect.php';
         <!-- Button trigger modal -->
 
         <a href="create.php" style="text-decoration: none; color:white;">
-            <button class="btn btn-success" style="margin-bottom: 8px; font-size: 14px;"> <i class="fa fa-plus" style="margin-right: 4px;"></i> Add New </button>
+            <button class="btn btn-sm btn-success me-2" style="margin-bottom: 8px; font-size: 14px;"> <i class="fa fa-plus" style="margin-right: 4px;"></i> Add New </button>
 
         </a>
 
@@ -110,7 +110,7 @@ include '../../Config/conect.php';
             while ($row = $resutl->fetch_assoc()) {
             ?>
                 <tr>
-                    <td style="width: 90px;">
+                    <td>
                         <a href="edit.php?code=<?php echo $row['EmpCode']; ?>
                          " style="font-size: 13px;" class="btn btn-warning editButton"><i class="fa fa-edit"></i></a>
                         <button style="font-size: 13px;" class="btn btn-danger " onclick="deleteCompany('<?php echo $row['EmpCode']; ?>')"><i class="fa fa-trash"></i></button>
@@ -123,7 +123,9 @@ include '../../Config/conect.php';
                     <td><?php echo $row['DepartmentName']; ?></td>
                     <td><?php echo $row['DivisionName']; ?></td>
                     <td><?php echo $row['StartDate']; ?></td>
-                    <td><?php echo $row['Status']; ?></td>
+                    <td>
+                        <span class="badge bg-<?php echo $row['Status'] === 'Active' ? 'success' : 'danger'; ?>"><?php echo $row['Status']; ?></span>
+                    </td>
                     <td><?php echo $row['Contact']; ?></td>
                 </tr>
 

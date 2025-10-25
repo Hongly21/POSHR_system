@@ -61,17 +61,22 @@ include '../../Config/conect.php';
         background-color: #0056b3;
     }
 </style>
+<script>
+    $(document).ready(function() {
+        $('#example1').DataTable();
+    });
+</script>
 <div class="container" style="margin-top: 15px; border: 0.4px solid #ccc;  padding: 20px; border-radius: 5px;">
     <?php
     $sql = "SELECT * FROM public_holidays";
     $result = $con->query($sql);
     ?>
-    <table class="table" id="example">
+    <table class="table" id="example1">
         <thead>
             <tr>
                 <th>
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addHolidayModalLabel">
-                        <i style="margin-right: 5px;" class="fa fa-plus"></i> Add
+                    <button type="button" class="btn btn-sm btn-success me-2" data-bs-toggle="modal" data-bs-target="#addHolidayModalLabel">
+                        <i style="margin-right: 5px;" class="fa fa-plus"></i> Add New
                     </button>
                 </th>
                 <th>ID</th>
@@ -86,7 +91,7 @@ include '../../Config/conect.php';
             ?>
                 <tr>
                     <td>
-                        <button type="button" data-bs-toggle="modal" data-bs-target="#UpdateHolidayModalLabel" class="btn btn-primary editButton"
+                        <button type="button" data-bs-toggle="modal" data-bs-target="#UpdateHolidayModalLabel" class="btn btn-sm btn-warning me-2 editButton"
                             data-id="<?php echo $row['id']; ?>"
                             data-holiday_name="<?php echo $row['holiday_name']; ?>"
                             data-description="<?php echo $row['description']; ?>"
@@ -94,7 +99,7 @@ include '../../Config/conect.php';
 
                             <i class="fa fa-edit"></i>
                         </button>
-                        <button class="btn btn-danger" onclick="deleteHoliday('<?php echo $row['id']; ?>')"><i class="fa fa-trash"></i></button>
+                        <button class="btn btn-sm btn-danger me-2" onclick="deleteHoliday('<?php echo $row['id']; ?>')"><i class="fa fa-trash"></i></button>
                     </td>
                     <td><?php echo $row['id']; ?></td>
                     <td><?php echo $row['holiday_name']; ?></td>
@@ -286,9 +291,9 @@ include '../../Config/conect.php';
                         })
                     }
                 }
-            })          
-        })}
-    )
+            })
+        })
+    })
 </script>
 
 <!-- //delete alert mesaages -->

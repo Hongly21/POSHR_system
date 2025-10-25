@@ -2,7 +2,7 @@
 include('../../Config/conect.php');
 
 
-$empcode = $_GET['id'];
+$empcode = $_GET['Code'];
 
 $sql = "DELETE FROM provertime WHERE ID = '$empcode'";
 $run = $con->query($sql);

@@ -106,6 +106,27 @@ include('../../Config/conect.php');
             </div>
         </div>
     </div>
+    <?php
+    if (isset($_GET['codegenerate'])) {
+        echo "<script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: 'Salary Generated Successfully',
+                showConfirmButton: true
+            })
+        </script>";
+    } elseif (isset($_GET['invalidmonth'])) {
+        echo "<script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'This month is already generated',
+                showConfirmButton: true
+            })
+        </script>";
+    }
+    ?>
 </body>
 
 <script>
@@ -120,7 +141,13 @@ include('../../Config/conect.php');
                 var month = $('#month').val();
                 window.location.href = '../../action/PRGenSalary/index.php?id=' + selectedEmpCodes.join(',') + '&month=' + month;
             } else {
-                alert('Please select at least one employee.');
+                // alert('Please select at least one employee.');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Please select at least one employee.',
+                    showConfirmButton: true
+                })
             }
 
         });

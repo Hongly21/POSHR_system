@@ -7,7 +7,7 @@
   $run = $con->query($sql);
   if ($run) {
     echo "success";
-    // header("Location: ../../view/PRApproveSalary/index.php");
+    header("location:../../view/PRApproveSalary/index.php?approvedsuccess=$id");
   } else {
     echo "error" . $con->error; 
   }

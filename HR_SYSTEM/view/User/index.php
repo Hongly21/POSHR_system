@@ -5,10 +5,12 @@ include("../../root/Header.php");
 </head>
 
 <body>
+    <h2 style="text-align: center; margin-top: 10px;">User Setting</h2>
+
     <div class="container-fluid mt-3" style="max-width: 1400px;">
         <nav>
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Tax Setting</button>
+                <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">User Setting</button>
             </div>
         </nav>
         <div class="tab-content" id="nav-tabContent">

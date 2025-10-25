@@ -1,4 +1,5 @@
-<?php include('../../root/Header.php');
+<?php
+include('../../root/Header.php');
 include('../../Config/conect.php'); ?>
 
 <head>
@@ -6,7 +7,7 @@ include('../../Config/conect.php'); ?>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Career History</title>
     <!-- Career History CSS -->
-    <link href="../../style/career.css" rel="stylesheet">
+    <!-- <link href="../../style/career.css" rel="stylesheet"> -->
 </head>
 
 
@@ -22,7 +23,7 @@ include('../../Config/conect.php'); ?>
                         </div>
                     </div>
                     <div class="card-body">
-                        <form id="careerHistoryForm" action="../../action/CareerHistory/update.php" method="GET">
+                        <form id="careerHistoryForm">
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="mb-3">
@@ -90,13 +91,13 @@ include('../../Config/conect.php'); ?>
                                                     $result = $con->query($sql1);
                                                     while ($row = $result->fetch_assoc()) {
                                                         $level = $row['level'];
-                                                        $sql2= "SELECT `Description` FROM `hrlevel` WHERE `Code`='$level'";
+                                                        $sql2 = "SELECT `Description` FROM `hrlevel` WHERE `Code`='$level'";
                                                         $result2 = $con->query($sql2);
                                                         while ($row2 = $result2->fetch_assoc()) {
                                                             echo $row2['Description'];
                                                         }
                                                     }
-                                            ?>">
+                                                    ?>">
                                     </div>
                                 </div>
                             </div>
@@ -111,8 +112,21 @@ include('../../Config/conect.php'); ?>
                                     <div class="mb-3">
                                         <label for="endDate" class="form-label">Resignation Date</label>
                                         <input type="date" class="form-control" id="endDateUpdate" name="endDate" value="<?php echo $endDate; ?>">
+
+                                        <!-- reset value endDate -->
+                                        <button type="button" id="resetEndDate" class="btn btn-secondary mt-2">Reset</button>
                                     </div>
                                 </div>
+
+                                <script>
+                                    $(document).ready(function() {
+                                        $("#resetEndDate").click(function(e) {
+                                            e.preventDefault(); // Stop form submission
+                                            $("#endDateUpdate").val(""); // Clear the date
+                                        });
+                                    });
+                                </script>
+
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
@@ -131,21 +145,7 @@ include('../../Config/conect.php'); ?>
                                             <option value="TRANSFER">Transfer</option>
                                             <option value="RESIGN">Resign</option>
                                             <option value="INCREASE">Increase Salary</option>
-                                            <?php
-                                            // $careerCodes = [
-                                            //     'NEW' => 'New Join',
-                                            //     'PROMOTE' => 'Promote',
-                                            //     'TRANSFER' => 'Transfer',
-                                            //     'RESIGN' => 'Resign',
-                                            //     'INCREASE' => 'Increase Salary'
-                                            // ];
-                                            // foreach ($careerCodes as $code => $label) {
-                                            //     $badgeClass = 'badge-' . strtolower($code);
-                                            //     echo "
-                                            //     <option value='{$code}' class='{$badgeClass}' >{$label}</option>
-                                            //     ";
-                                            // }
-                                            ?>
+
                                         </select>
                                     </div>
                                 </div>
@@ -157,7 +157,7 @@ include('../../Config/conect.php'); ?>
                                 </div>
                             </div>
                             <div class="text-end">
-                                <button type="submit" class="btn btn-primary">Update Career History</button>
+                                <button class="btn btn-primary btnsubmit">Update Career History</button>
                             </div>
                         </form>
                     </div>
@@ -167,3 +167,61 @@ include('../../Config/conect.php'); ?>
     </div>
 
 </body>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    $(document).ready(function() {
+        $('.btnsubmit').click(function(e) {
+            e.preventDefault(); 
+
+            var empID = $('#employeeIDUpdate').val();
+            var startDate = $('#startDateUpdate').val();
+            var endDate = $('#endDateUpdate').val();
+            var increase = $('#increaseUpdate').val();
+            var careerCode = $('#careerCodeUpdate').val();
+            var remark = $('#remarkUpdate').val();
+
+            $.ajax({
+                url: '../../action/CareerHistory/update.php',
+                method: 'GET',
+                data: {
+                    employeeID: empID,
+                    startDate: startDate,
+                    endDate: endDate,
+                    increase: increase,
+                    careerCode: careerCode,
+                    remark: remark
+                },
+                success: function(response) {
+                    response = response.trim(); 
+                    console.log(response); 
+
+                    if (response === "success") {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Success!",
+                            text: "Career history updated successfully!",
+                            showConfirmButton: true
+                        }).then(() => {
+                            window.location.href = "../../view/CareerHistory/index.php";
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Error!",
+                            text: response,
+                            showConfirmButton: true
+                        });
+                    }
+                },
+                error: function(xhr, status, error) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Request Failed",
+                        text: "Something went wrong: " + error,
+                        showConfirmButton: true
+                    });
+                }
+            });
+        });
+    });
+</script>
