@@ -31,6 +31,7 @@ if (isset($_GET['action'])) {
         `description` = '$description',
         `workday` = '$workday',
         `hourperday` = '$hourperday',
+        `hourperweek` = '" . ($monhours + $tueshours + $wedhours + $thurhours + $frihours + $sathours + $sunhours) . "',
         `fromdate` = '$fromdate',
         `todate`= '$todate',
         `mon`= '$mon',
@@ -57,25 +58,6 @@ if (isset($_GET['action'])) {
             echo "fail";  $con->error;
         }
 
-        // $sql = "UPDATE `prpaypolicy` SET 
-        // `description` = 'Junion1',
-        // `workday` = '5',
-        // `hourperday` = '8',
-        // `fromdate` = '2022-01-01',
-        // `todate`= '2022-12-31',
-        // `mon`= '1',
-        //  `tues` = '1',
-        //   `wed` = '1',
-        //    `thur` = '1',
-        //     `fri` = '1',
-        //      `sat` = '1',
-        //       `sun` = '1',
-        //  `monhours` = '8',
-        //   `tueshours` = '5',
-        //    `wedhours` = '8',
-        //     `thurhours` = '8',
-        //      `frihours` = '5', 
-        //      `sathours` = '4', 
-        //      `sun` = '0' WHERE `prpaypolicy`.`code` = $code;";
+
     }
 }

@@ -378,7 +378,11 @@ include("../../../root/Header.php");
                         $grosspay = '';
                         $UntaxAm = '';
                         $NSSF = '';
+
                         $NetSalary = '';
+                        $LeavedTax = '';
+                        $Tax = '';
+                        $todaldeduction = '';
                     } elseif ($empcode && $month) {
                         $sql1 = "SELECT 
                                         s.EmpCode,
@@ -395,7 +399,9 @@ include("../../../root/Header.php");
                                         s.Grosspay,
                                         s.UntaxAm,
                                         s.NSSF,
-                                        s.NetSalary
+                                        s.NetSalary,
+                                        s.Family,
+                                        s.LeavedTax
                                     FROM hisgensalary s
                                     LEFT JOIN hrstaffprofile e ON s.EmpCode = e.EmpCode
                                     LEFT JOIN hrdepartment d ON e.Department = d.Code
@@ -409,6 +415,7 @@ include("../../../root/Header.php");
                         $runempname = $con->query($slqempname);
                         $rowempname = $runempname->fetch_assoc();
                         $EmpName = $rowempname['EmpName'];
+
                         if (!$run1) {
                             echo "<script>
                                         Swal.fire({
@@ -445,6 +452,9 @@ include("../../../root/Header.php");
                             $UntaxAm = '';
                             $NSSF = '';
                             $NetSalary = '';
+                            $LeavedTax = '';
+                            $Tax = '';
+                            $todaldeduction = '';
                         } else {
                             echo "<script>
                                     Swal.fire({
@@ -470,6 +480,9 @@ include("../../../root/Header.php");
                                 $UntaxAm = $row1['UntaxAm'];
                                 $NSSF = $row1['NSSF'];
                                 $NetSalary = $row1['NetSalary'];
+                                $LeavedTax = $row1['LeavedTax'];
+                                $Tax = $row1['Family'];
+                                $todaldeduction = $NSSF + $Ded + $LeavedTax + $Tax;
                             }
                         }
                     }
@@ -489,6 +502,9 @@ include("../../../root/Header.php");
                     $UntaxAm = '';
                     $NSSF = '';
                     $NetSalary = '';
+                    $LeavedTax = '';
+                    $Tax = '';
+                    $todaldeduction = '';
                 }
                 ?>
 
@@ -551,12 +567,21 @@ include("../../../root/Header.php");
                                     <span class="amount-value" id="nssfAmount">$ <?php echo $NSSF; ?></span>
                                 </div>
                                 <div class="amount-row">
+                                    <span class="amount-label">Tax</span>
+                                    <span class="amount-value" id="taxAmount">$ <?php echo $Tax; ?></span>
+                                </div>
+                                <div class="amount-row">
+                                    <span class="amount-label">Leave Tax</span>
+                                    <span class="amount-value" id="leaveTax">$ <?php echo $LeavedTax; ?></span>
+                                </div>
+
+                                <div class="amount-row">
                                     <span class="amount-label">Other Deductions</span>
                                     <span class="amount-value" id="otherDeductions">$ <?php echo $Ded; ?></span>
                                 </div>
                                 <div class="amount-row total-row">
                                     <span class="amount-label">Total Deductions</span>
-                                    <span class="amount-value" id="totalDeductions">$ <?php echo $UntaxAm; ?></span>
+                                    <span class="amount-value" id="totalDeductions">$ <?php echo $todaldeduction; ?></span>
                                 </div>
                             </div>
                         </div>
@@ -568,7 +593,7 @@ include("../../../root/Header.php");
                     </div>
 
                     <div class="export-buttons justify-content-end mt-4">
-                
+
                         <button type="button" id="exportPDF" class="btn btn-danger btn-export">
                             <i class="fas fa-file-pdf"></i>
                             <span>Export to PDF</span>

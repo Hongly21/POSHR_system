@@ -4,7 +4,7 @@ include '../../root/Header.php';
 
 
 // Fetch leave request data
-$sql = "SELECT * FROM lmleaverequest ORDER BY FromDate DESC";
+$sql = "SELECT * FROM lmleaverequest WHERE Status = 'Pending' ORDER BY FromDate DESC";
 $result = $con->query($sql);
 ?>
 

@@ -341,6 +341,7 @@ include("../../Config/conect.php");
                 $UntaxAm = $row1['UntaxAm'];
                 $NSSF = $row1['NSSF'];
                 $NetSalary = $row1['NetSalary'];
+                $Family=$row1['Family'];
             } else {
                 $empcode = '';
                 $empName = '';
@@ -435,7 +436,7 @@ include("../../Config/conect.php");
                             <tr>
                                 <td>Tax</td>
                                 <td>Income Tax</td>
-                                <td class="text-end">$<?php echo $leavetax; ?></td>
+                                <td class="text-end">$<?php echo $Family; ?></td>
                             </tr>
                             <tr>
                                 <td>NSSF</td>

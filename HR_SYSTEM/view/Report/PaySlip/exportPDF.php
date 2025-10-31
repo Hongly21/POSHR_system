@@ -34,7 +34,9 @@ $sql = "SELECT
             s.Grosspay,
             s.UntaxAm,
             s.NSSF,
-            s.NetSalary
+            s.NetSalary,
+            s.Family,
+            s.LeavedTax
         FROM hisgensalary s
         LEFT JOIN hrstaffprofile e ON s.EmpCode = e.EmpCode
         LEFT JOIN hrdepartment d ON e.Department = d.Code
@@ -48,6 +50,7 @@ $sqlempname = "SELECT EmpName FROM hrstaffprofile WHERE EmpCode = '$empcode'";
 $resultempname = $con->query($sqlempname);
 $rowempname = $resultempname->fetch_assoc();
 $empname = $rowempname['EmpName'];
+
 
 if (!$result || $result->num_rows === 0) {
     echo "<script>alert('No payslip found for this employee in this month.'); window.close();</script>";
@@ -70,6 +73,11 @@ $html = '<div style="text-align:center;">
         </div>';
 
 while ($row = $result->fetch_assoc()) {
+    $Tax = $row['Family'];
+    $LeavedTax = $row['LeavedTax'];
+    $NSSF = $row['NSSF'];
+    $Ded = $row['Dedction'];
+    $totaldeduction = $NSSF + $Ded + $LeavedTax + $Tax;
     $html .= '
     <h3 style="text-align:center;">' . htmlspecialchars($row['CompanyName']) . '</h3>
     <p><strong>Employee Code:</strong> ' . htmlspecialchars($row['EmpCode']) . '<br>
@@ -89,14 +97,16 @@ while ($row = $result->fetch_assoc()) {
         <tr><td><strong>Total Gross Pay</strong></td><td><strong>' . $row['Grosspay'] . '</strong></td></tr>
     </table>
     <br>
-    <table border="1" width="100%" cellspacing="0" cellpadding="5">
+    <table border="1" width="100%" cellspacing="0" cellpadding="7">
         <tr style="background-color:#f2f2f2;">
             <th>Deductions</th>
             <th>Amount ($)</th>
         </tr>
         <tr><td>NSSF</td><td>' . $row['NSSF'] . '</td></tr>
+        <tr><td>Leave Tax</td><td>' . $row['LeavedTax'] . '</td></tr>
+        <tr><td>Income Tax</td><td>' . $row['Family'] . '</td></tr>
         <tr><td>Other Deductions</td><td>' . $row['Dedction'] . '</td></tr>
-        <tr><td><strong>Total Deductions</strong></td><td><strong>' . $row['UntaxAm'] . '</strong></td></tr>
+        <tr><td><strong>Total Deductions</strong></td><td><strong>' . $totaldeduction . '</strong></td></tr>
     </table>
     <h3 style="text-align:right;">Net Pay: $' . $row['NetSalary'] . '</h3>
     <h3 style="text-align:right;">BOUN Hongly' . '</h3>

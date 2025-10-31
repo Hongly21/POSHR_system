@@ -39,7 +39,7 @@ $allowance = $row1['Allowance'];
 $Ot = $row1['OT'];
 $bonus = $row1['Bonus'];
 $Ded = $row1['Dedction'];
-$leavetax = $row1['LeavedTax'];
+$leavetax = $row1['Family'];
 $NSSF = $row1['NSSF'];
 $NetSalary = $row1['NetSalary'];
 
