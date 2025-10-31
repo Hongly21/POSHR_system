@@ -1,14 +1,22 @@
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
-include('../../../Config/conect.php'); 
+include('../../../Config/conect.php');
 
 
 $month = isset($_GET['month']) ? $_GET['month'] : '';
 $empcode = isset($_GET['empcode']) ? $_GET['empcode'] : '';
 
 if (empty($month) || empty($empcode)) {
-    echo "<script>alert('Missing employee code or month.'); window.close();</script>";
-
+    echo "
+      script>
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Please select both employee code and month.',
+        showConfirmButton: true
+      })
+      </script>
+    ";
 }
 
 $sql = "SELECT 
@@ -35,15 +43,29 @@ $sql = "SELECT
         WHERE s.InMonth = '$month' AND s.EmpCode = '$empcode'";
 
 $result = $con->query($sql);
+//find EmpName
+$sqlempname = "SELECT EmpName FROM hrstaffprofile WHERE EmpCode = '$empcode'";
+$resultempname = $con->query($sqlempname);
+$rowempname = $resultempname->fetch_assoc();
+$empname = $rowempname['EmpName'];
 
 if (!$result || $result->num_rows === 0) {
     echo "<script>alert('No payslip found for this employee in this month.'); window.close();</script>";
     exit;
 }
 
+// <div style="text-align:center;">
+//             <img style="width: 90px; height: 90px; border-radius: 50%; object-fit: cover; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);" src="2.png" alt="Company Logo" >
+
+//             <br>
+//             <h2>PAYSLIP</h2>
+//         </div>
+
 // Build HTML
 $html = '<div style="text-align:center;">
-            <img src="2.png" style="width:80px;height:80px; border-radius:50%;"><br>
+            <img style="width: 90px; height: 90px; border-radius: 50%; object-fit: cover; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);" src="2.png" alt="Company Logo" >
+            
+            <br>
             <h2>PAYSLIP</h2>
         </div>';
 
@@ -79,16 +101,10 @@ while ($row = $result->fetch_assoc()) {
     <h3 style="text-align:right;">Net Pay: $' . $row['NetSalary'] . '</h3>
     <h3 style="text-align:right;">BOUN Hongly' . '</h3>
     
-    ' 
-
-
-    
-    ;
-    
-    
+    ';
 }
 
 // Generate PDF
 $mpdf = new \Mpdf\Mpdf();
 $mpdf->WriteHTML($html);
-$mpdf->Output('Payslip_' . $empcode . '_' . $month . '.pdf', 'D'); // 'D' forces download
+$mpdf->Output('Payslip_' . $empname . '_' . $month . '.pdf', 'D'); // 'D' forces download

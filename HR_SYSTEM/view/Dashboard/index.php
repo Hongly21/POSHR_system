@@ -1,9 +1,10 @@
 <?php
-    include ("../../action/Dashboard/fetch.php");
+include("../../action/Dashboard/fetch.php");
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,6 +14,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 </head>
+
 <body>
     <div class="container-fluid py-4">
         <div class="dashboard-header">
@@ -75,7 +77,7 @@
                         <i class="fas fa-users text-white"></i>
                     </div>
                     <div class="metric-value"><?php echo $TotalLeaveRequest; ?></div>
-                    <div class="metric-label">Leave  Request</div>
+                    <div class="metric-label">Leave Request</div>
                 </div>
             </div>
             <div class="col-md-3">
@@ -160,40 +162,40 @@
                             </thead>
                             <tbody>
                                 <?php foreach ($recentEmployees as $employee): ?>
-                                <tr>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div class="bg-light rounded-circle p-2 me-3">
-                                                <i class="fas fa-user text-primary"></i>
-                                            </div>
-                                            <div>
-                                                <div class="fw-bold"><?php echo htmlspecialchars($employee['name']); ?></div>
-                                                <div class="small text-muted">
-                                                    <?php echo htmlspecialchars($employee['EmpCode']); ?> · 
-                                                    <a href="mailto:<?php echo htmlspecialchars($employee['Email']); ?>" class="text-decoration-none">
-                                                        <?php echo htmlspecialchars($employee['Email']); ?>
-                                                    </a>
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="bg-light rounded-circle p-2 me-3">
+                                                    <i class="fas fa-user text-primary"></i>
+                                                </div>
+                                                <div>
+                                                    <div class="fw-bold"><?php echo htmlspecialchars($employee['name']); ?></div>
+                                                    <div class="small text-muted">
+                                                        <?php echo htmlspecialchars($employee['EmpCode']); ?> ·
+                                                        <a href="mailto:<?php echo htmlspecialchars($employee['Email']); ?>" class="text-decoration-none">
+                                                            <?php echo htmlspecialchars($employee['Email']); ?>
+                                                        </a>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <span class="badge bg-light text-dark">
-                                            <?php echo htmlspecialchars($employee['Department']); ?>
-                                        </span>
-                                    </td>
-                                    <td><?php echo htmlspecialchars($employee['Position']); ?></td>
-                                    <td>
-                                        <div class="text-muted small">
-                                            <?php echo date('d M Y', strtotime($employee['hire_date'])); ?>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <span class="badge bg-primary-soft text-primary">
-                                            <?php echo $employee['experience']; ?> year(s)
-                                        </span>
-                                    </td>
-                                </tr>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-light text-dark">
+                                                <?php echo htmlspecialchars($employee['Department']); ?>
+                                            </span>
+                                        </td>
+                                        <td><?php echo htmlspecialchars($employee['Position']); ?></td>
+                                        <td>
+                                            <div class="text-muted small">
+                                                <?php echo date('d M Y', strtotime($employee['hire_date'])); ?>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-primary-soft text-primary">
+                                                <?php echo $employee['experience']; ?> year(s)
+                                            </span>
+                                        </td>
+                                    </tr>
                                 <?php endforeach; ?>
                             </tbody>
                         </table>
@@ -204,112 +206,113 @@
     </div>
 
     <script>
-    // Department Chart
-    const departmentCtx = document.getElementById('departmentChart').getContext('2d');
-    new Chart(departmentCtx, {
-        type: 'bar',
-        data: {
-            labels: <?php echo json_encode(array_column($departmentData, 'Department')); ?>,
-            datasets: [{
-                label: 'Employees',
-                data: <?php echo json_encode(array_column($departmentData, 'count')); ?>,
-                backgroundColor: ['#0d6efd', '#dc3545', 'black', '#ffc107', '#6f42c1', '#fd7e14', '#20c997', '#0dcaf0'],
-                borderRadius: 6,
-                borderWidth: 0
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        stepSize: 1,
-                        font: {
-                            size: 12
+        // Department Chart
+        const departmentCtx = document.getElementById('departmentChart').getContext('2d');
+        new Chart(departmentCtx, {
+            type: 'bar',
+            data: {
+                labels: <?php echo json_encode(array_column($departmentData, 'Department')); ?>,
+                datasets: [{
+                    label: 'Employees',
+                    data: <?php echo json_encode(array_column($departmentData, 'count')); ?>,
+                    backgroundColor: ['#0d6efd', '#dc3545', 'black', '#ffc107', '#6f42c1', '#fd7e14', '#20c997', '#0dcaf0'],
+                    borderRadius: 6,
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1,
+                            font: {
+                                size: 12
+                            }
+                        },
+                        grid: {
+                            display: true,
+                            drawBorder: false
                         }
                     },
-                    grid: {
-                        display: true,
-                        drawBorder: false
+                    x: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            font: {
+                                size: 12
+                            }
+                        }
                     }
                 },
-                x: {
-                    grid: {
+                plugins: {
+                    legend: {
                         display: false
                     },
-                    ticks: {
-                        font: {
-                            size: 12
+                    tooltip: {
+                        backgroundColor: '#000',
+                        padding: 12,
+                        titleFont: {
+                            size: 14
+                        },
+                        bodyFont: {
+                            size: 13
                         }
                     }
                 }
-            },
-            plugins: {
-                legend: {
-                    display: false
-                },
-                tooltip: {
-                    backgroundColor: '#000',
-                    padding: 12,
-                    titleFont: {
-                        size: 14
-                    },
-                    bodyFont: {
-                        size: 13
-                    }
-                }
             }
-        }
-    });
+        });
 
-    // Salary Range Chart
-    const salaryCtx = document.getElementById('salaryChart').getContext('2d');
-    new Chart(salaryCtx, {
-        type: 'doughnut',
-        data: {
-            labels: <?php echo json_encode(array_column($salaryData, 'salary_range')); ?>,
-            datasets: [{
-                data: <?php echo json_encode(array_column($salaryData, 'count')); ?>,
-                backgroundColor: [
-                    '#0d6efd',
-                    '#20c997',
-                    '#6610f2',
-                    '#dc3545'
-                ],
-                borderWidth: 0,
-                cutout: '75%'
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: 'bottom',
-                    labels: {
-                        padding: 20,
-                        usePointStyle: true,
-                        pointStyle: 'circle',
-                        font: {
-                            size: 12
+        // Salary Range Chart
+        const salaryCtx = document.getElementById('salaryChart').getContext('2d');
+        new Chart(salaryCtx, {
+            type: 'doughnut',
+            data: {
+                labels: <?php echo json_encode(array_column($salaryData, 'salary_range')); ?>,
+                datasets: [{
+                    data: <?php echo json_encode(array_column($salaryData, 'count')); ?>,
+                    backgroundColor: [
+                        '#0d6efd',
+                        '#20c997',
+                        '#6610f2',
+                        '#dc3545'
+                    ],
+                    borderWidth: 0,
+                    cutout: '75%'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 20,
+                            usePointStyle: true,
+                            pointStyle: 'circle',
+                            font: {
+                                size: 12
+                            }
                         }
-                    }
-                },
-                tooltip: {
-                    backgroundColor: '#000',
-                    padding: 12,
-                    titleFont: {
-                        size: 14
                     },
-                    bodyFont: {
-                        size: 13
+                    tooltip: {
+                        backgroundColor: '#000',
+                        padding: 12,
+                        titleFont: {
+                            size: 14
+                        },
+                        bodyFont: {
+                            size: 13
+                        }
                     }
                 }
             }
-        }
-    });
+        });
     </script>
 </body>
+
 </html>

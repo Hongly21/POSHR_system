@@ -1,64 +1,41 @@
 <?php
-session_start();
 include("../../Config/conect.php");
 
-header('Content-Type: application/json');
+if (isset($_POST['username']) && isset($_POST['email']) && isset($_POST['password']) && isset($_POST['role']) && isset($_POST['status'])) {
+    $username = trim($_POST['username']);
+    $email = trim($_POST['email']);
+    $password = trim($_POST['password']);
+    $role = trim($_POST['role']);
+    $status = trim($_POST['status']);
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && $_POST['type'] == "User") {
-    $username = $_POST['username'];
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-    $role = $_POST['role'];
-    $status = $_POST['status'];
+    $sqlname = "SELECT * FROM hrusers WHERE Username = '$username'";
+    $sqlemail = "SELECT * FROM hrusers WHERE Email = '$email'";
+    $sqlpdw= "SELECT * FROM hrusers WHERE Password = '$password'";
 
-    // Validate required fields
-    if (empty($username) || empty($email) || empty($password) || empty($role) || empty($status)) {
-        echo json_encode(["status" => "error", "message" => "All fields are required"]);
-        exit;
-    }
+    $resultname = $con->query($sqlname);
+    $resultemail = $con->query($sqlemail);
+    $resultpwd=$con->query($sqlpdw);
 
-    // Validate email format
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        echo json_encode(["status" => "error", "message" => "Invalid email format"]);
-        exit;
-    }
 
-    // Check if username already exists
-    $checkUsername = $con->prepare("SELECT UserID FROM hrusers WHERE Username = ?");
-    $checkUsername->bind_param("s", $username);
-    $checkUsername->execute();
-    if ($checkUsername->get_result()->num_rows > 0) {
-        echo json_encode(["status" => "error", "message" => "Username already exists"]);
-        exit;
-    }
+    if ($resultname && $resultname->num_rows > 0) {
+        echo "nameexists";
+    } else if ($resultemail && $resultemail->num_rows > 0) {
+        echo "mailexists";
+    } else if($resultpwd && $resultpwd->num_rows > 0){
+        echo "cannotuse";
 
-    // Check if email already exists
-    $checkEmail = $con->prepare("SELECT UserID FROM hrusers WHERE Email = ?");
-    $checkEmail->bind_param("s", $email);
-    $checkEmail->execute();
-    if ($checkEmail->get_result()->num_rows > 0) {
-        echo json_encode(["status" => "error", "message" => "Email already exists"]);
-        exit;
-    }
-
-    // Hash password
-    //$hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-    $hashedPassword = $password;
-    // Insert new user
-    $sql = "INSERT INTO hrusers (Username, Email, Password, Role, Status, CreatedAt) VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
-    $stmt = $con->prepare($sql);
-    $stmt->bind_param("sssss", $username, $email, $hashedPassword, $role, $status);
-
-    if ($stmt->execute()) {
-        echo json_encode(["status" => "success", "message" => "User added successfully", "id" => $con->insert_id]);
     } else {
-        echo json_encode(["status" => "error", "message" => "Error adding user: " . $stmt->error]);
+
+
+        $sql = "INSERT INTO hrusers (Username, Email, Password, Role, Status)
+                VALUES ('$username', '$email', '$password', '$role', '$status')";
+
+        $run = $con->query($sql);
+
+        if ($run) {
+            echo "success";
+        } else {
+            echo "error: " . $con->error;
+        }
     }
-
-    $stmt->close();
-} else {
-    echo json_encode(["status" => "error", "message" => "Invalid request method"]);
 }
-
-$con->close();
-?>

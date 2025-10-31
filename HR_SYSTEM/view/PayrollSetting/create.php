@@ -238,13 +238,7 @@ include("../../root/Header.php");
                 var satHours = sat ? $("#satHours").val() : 0;
                 var sunHours = sun ? $("#sunHours").val() : 0;
 
-                // var monHours = $("#monHours").val();
-                // var tuesHours = $("#tuesHours").val();
-                // var wedHours = $("#wedHours").val();
-                // var thurHours = $("#thurHours").val();
-                // var friHours = $("#friHours").val();
-                // var satHours = $("#satHours").val();
-                // var sunHours = $("#sunHours").val();
+    
 
                 $.ajax({
                     url: "../../action/PayrollSetting/add.php",

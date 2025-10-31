@@ -57,11 +57,11 @@ include('../../root/Header.php');
                     <td>Panding</td>
                     <td><?php echo $row['Remark']; ?></td>
                     <td>
-                        <a href="../../action/PRApproveSalary/approve.php?id=<?php echo $row1['ID']; ?>" class="btn btn-success btn-sm approve-btn" data-id="<?php echo $row['ID']; ?>">
+                        <a href="../../action/PRApproveSalary/approve.php?id=<?php echo $row1['ID']; ?> && InMonth=<?php echo $row1['InMonth']; ?> " class="btn btn-success btn-sm approve-btn">
                             <i class="fas fa-check"></i> Approve </a>
-                        <button class="btn btn-danger btn-sm reject-btn" data-id="<?php echo $row1['ID']; ?>">
-                            <i class="fas fa-times"></i> Reject
-                        </button>
+                        <a href="../../action/PRApproveSalary/reject.php?id=<?php echo $row1['ID']; ?> && InMonth=<?php echo $row1['InMonth']; ?> " class="btn btn-danger btn-sm reject-btn">
+                            <i class="fas fa-times"></i> Reject</a>
+
                     </td>
                 </tr>
             <?php
@@ -71,41 +71,23 @@ include('../../root/Header.php');
     </table>
 </div>
 <?php
-if (isset($_GET['approvedsuccess'])) {
+if (isset($_GET['approvedsuccess']) && isset($_GET['inmonthapprove'])) {
     echo "<script>
         Swal.fire({
             icon: 'success',
             title: 'Success',
-            text: 'Salary Approved Successfully',
+            text: 'Salary Approved in $_GET[inmonthapprove] Successfully',
             showConfirmButton: true
         })
     </script>";
-}elseif (isset($_GET['rejectedsuccess'])) {
+} elseif (isset($_GET['rejectedsuccess']) && isset($_GET['monthrejected'])) {
     echo "<script>
         Swal.fire({
             icon: 'success',
             title: 'Success',
-            text: 'Salary Rejected Successfully',
+            text: 'Salary on $_GET[monthrejected] is Rejected',
             showConfirmButton: true
         })
     </script>";
 }
 ?>
-
-<script>
-    $(document).ready(function() {
-        $('.reject-btn').click(function() {
-            var id = $(this).data('id');
-            $.ajax({
-                url: '../../action/PRApproveSalary/reject.php',
-                type: 'POST',
-                data: {
-                    id: id
-                },
-                success: function(response) {
-                    location.reload();
-                }
-            });
-        })
-    })
-</script>

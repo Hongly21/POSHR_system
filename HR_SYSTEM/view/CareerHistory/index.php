@@ -15,23 +15,6 @@ include('../../root/DataTable.php');
     <title>Career History</title>
 
     <!-- <link href="../../style/career.css" rel="stylesheet"> -->
-
-    <style>
-        .dropdown-menu {
-            min-width: 120px;
-        }
-
-        .dropdown-item {
-            padding: 8px 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .dropdown-item i {
-            width: 16px;
-        }
-    </style>
 </head>
 <script>
     $(document).ready(function() {
@@ -52,25 +35,10 @@ include('../../root/DataTable.php');
                                     <i class="fas fa-plus me-2"></i>Create New
                                 </a> -->
                                 <!-- export -->
-                                <div class="dropdown">
-                                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Export
-                                    </button>
-                                    <ul class="dropdown-menu dropdown-menu-end">
-                                        <li>
-                                            <a class="dropdown-item" href="../../action/CareerHistory/export_excel.php">
-                                                <i class="far fa-file-excel text-success"></i>
-                                                Export Excel
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item" href="../../action/CareerHistory/export_pdf.php">
-                                                <i class="far fa-file-pdf text-danger"></i>
-                                                Export PDF
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
+                                <button class="btn btn-sm btn-warning me-2 btnexcel">Export to Excel</button>
+                                <button class="btn btn-sm btn-danger me-2 btnpdf">Export to PDF</button>
+
+
                             </div>
                         </div>
                     </div>
@@ -104,14 +72,14 @@ include('../../root/DataTable.php');
                                 while ($row = $run->fetch_array()) {
                                 ?>
                                     <tr>
-                                  <td>
-    <a href="edit.php?empid=<?= $row['EmployeeID']; ?>" class="btn btn-sm btn-warning me-2">
-        <i class="far fa-edit"></i>
-    </a>
-    <button class="btn btn-sm btn-danger" onclick="deleteLeaveType('<?= $row['EmployeeID']; ?>')">
-        <i class="far fa-trash-alt"></i>
-    </button>
-</td>
+                                        <td>
+                                            <a href="edit.php?empid=<?= $row['EmployeeID']; ?>" class="btn btn-sm btn-warning me-2">
+                                                <i class="far fa-edit"></i>
+                                            </a>
+                                            <button class="btn btn-sm btn-danger" onclick="deleteLeaveType('<?= $row['EmployeeID']; ?>')">
+                                                <i class="far fa-trash-alt"></i>
+                                            </button>
+                                        </td>
                                         <td>
                                             <span class="badge bg-<?php
                                                                     echo $row['CareerHistoryType'] === 'RESIGN' ? 'danger' : ($row['CareerHistoryType'] === 'TRANSFER' ? 'warning' : ($row['CareerHistoryType'] === 'PROMOTE' ? 'success' : ($row['CareerHistoryType'] === 'NEW' ? 'info' : ($row['CareerHistoryType'] === 'INCREASE' ? 'primary' : 'secondary'))));
@@ -199,6 +167,19 @@ include('../../root/DataTable.php');
                 }
             });
         }
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            $('.btnexcel').click(function() {
+                
+                window.location.href = 'exportExcel.php';
+
+            });
+            $('.btnpdf').click(function() {
+                window.location.href = 'exportPDF.php';
+            });
+        });
     </script>
 </body>
 

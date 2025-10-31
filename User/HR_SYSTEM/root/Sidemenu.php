@@ -1,4 +1,41 @@
 <!DOCTYPE html>
+<?php
+include('../Config/conect.php');
+
+$username = $_GET['username'];
+
+$sql = "SELECT hrstaffprofile.*,
+                    hrstaffprofile.EmpCode as Code,
+                    hrstaffprofile.Dob as DOB, 
+                    hrstaffprofile.Gender as Gender,
+                    hrstaffprofile.Address as Address,
+                    hrstaffprofile.Contact as Contact,
+                    hrstaffprofile.Email as Email,
+                    hrstaffprofile.Salary as Salary,
+                    hrstaffprofile.Photo as Photo,
+
+                    hrcompany.Description as CompanyName,
+                    hrdepartment.Description as DepartmentName,
+                    hrdivision.Description as DivisionName,
+                    hrposition.Description as PositionName,
+                    hrlevel.Description as LevelName 
+                    FROM hrstaffprofile
+                    LEFT JOIN hrcompany ON hrstaffprofile.Company = hrcompany.Code
+                    LEFT JOIN hrdepartment ON hrstaffprofile.Department = hrdepartment.Code
+                    LEFT JOIN hrdivision ON hrstaffprofile.Division = hrdivision.Code
+                    LEFT JOIN hrposition ON hrstaffprofile.Position = hrposition.Code
+                    LEFT JOIN hrlevel ON hrstaffprofile.Level = hrlevel.Code
+                    WHERE hrstaffprofile.EmpName = '$username'";
+$resutl = $con->query($sql);
+$row = $resutl->fetch_assoc();
+
+
+
+$photo = $row['Photo'];
+
+
+
+?>
 <html>
 
 <head>
@@ -10,174 +47,105 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="Style/sidemenu.css">
 </head>
+<style>
+    .image-user {
+        flex: 0 0 220px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        /* margin-right: 40px; */
+    }
+
+    .image-user img {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 5px solid #007bff;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    .dcs {
+        /* background-color: green; */
+    
+        margin-top: 10px;
+        padding: 0px 5px 0px 15px;
+        box-sizing: border-box;
+    }
+
+    label {
+        display: inline-block;
+            color: white;
+        width: 65px;
+        /* adjust width to align labels neatly */
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    input {
+        width: calc(100% - 90px);
+        /* make input align beside label */
+        padding: 6px 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        background: #f9f9f9;
+        font-size: 14px;
+        color: #333;
+    }
+    .username{
+        color: white;
+        margin-top: 20px;
+        text-align: center;
+        font-weight: bold;
+        margin-bottom: 40px;
+    }
+</style>
 
 <body>
     <div class="menu">
-        <!-- <div class="brand-logo">
-            <img src="../assets/images/yrm-logo.png" alt="YRM">
-        </div> -->
-        <div class="menu-search">
-            <input type="text" placeholder="Search menu..." class="form-control">
+        <div class="image-user">
+            <img src="../../../HR_SYSTEM/assets/images/<?php echo $photo; ?>" alt="">
+        </div>
+        <div class="name">
+            <h1 class="username"><?php echo $username ?></h1>
+        </div>
+        <div class="universtity-infor">
+            <?php
+            $sql = "SELECT hrstaffprofile.EmpName, hreducation.* FROM hrstaffprofile INNER JOIN hreducation ON hrstaffprofile.EmpCode= hreducation.EmpCode 
+            WHERE hrstaffprofile.EmpName='$username' ";
+            $run = $con->query($sql);
+            while ($resutlemp = $run->fetch_assoc()) {
+                $institution = $resutlemp['Institution'];
+                $degree = $resutlemp['Degree'];
+                $fieldstudy = $resutlemp['FieldOfStudy'];
+
+
+
+            ?>
+                <!-- <label for="universtiy">Universtity</label> -->
+                <div class="dcs">
+                    <label for="">EUD:</label>
+                    <input type="text" id="university" value="<?php echo $institution ?>" disabled><br>
+                    <label for="">Degree:</label>
+
+                    <input type="text" id="degree" value="<?php echo $degree ?>" disabled><br>
+                    <label for="">Major:</label>
+
+                    <input type="text" id="major" value="<?php echo $fieldstudy ?>" disabled><br>
+                </div>
+
+
+            <?php
+            }
+            ?>
         </div>
         <ul class="list-unstyled components">
-           <li>
-                    <a href="../view/Dashboard/index.php" target="content">
-                        <i class="fa fa-home"></i>Dasborad
-                    </a>
-                </li>
-
-                <!-- Master Set up -->
-                <li>
-                    <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                        <i class="fa fa-cog"></i><span lang="km">Setting</span>
-                    </a>
-                    <ul class="collapse list-unstyled" id="homeSubmenu">
-                        <li>
-                            <a href="../view/CompanyInfor/index.php" target="content">CompanyInfor</a>
-                        </li>
-                        <li>
-                            <a href="../view/PayrollSetting/index.php" target="content">Payroll</a>
-                        </li>
-                        <li>
-                            <a href="../view/TaxSetting/index.php" target="content">Tax Setting</a>
-                        </li>
-                        <li>
-                            <a href="../view/LeavePolicy/index.php" target="content">Leave Policy</a>
-                        </li>
-                        <!-- <li>
-                            <a href="../view/Menu/index.php" target="content">General Settings</a>
-                        </li> -->
-                        <li>
-                            <a href="../view/User/index.php" target="content">User Settings</a>
-                        </li>
-                        <!-- <li>
-                            <a href="../view/Telegramconfig/index.php" target="content">Telegram config</a>
-                        </li> -->
-                        <li>
-                            <a href="../view/OT/index.php" target="content">OT Setting</a>
-                        </li>
-                    </ul>
-                </li>
-
-                <!-- Employee -->
-                <li>
-                    <a href="#Order" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                        <i class="fa fa-users"></i><span lang="km">Employee</span>
-                    </a>
-                    <ul class="collapse list-unstyled" id="Order">
-                        <li>
-                            <a href="../view/StaffProfile/index.php" target="content">Staff Profile</a>
-                        </li>
-                        <li>
-                            <a href="../view/CareerHistory/index.php" target="content">Career History</a>
-                        </li>
-                    </ul>
-                </li>
-
-                <!-- Self Service -->
-                <!-- <li>
-                    <a href="#ESS" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                        <i class="fa fa-book"></i><span lang="km">Self Service</span>
-                    </a>
-                    <ul class="collapse list-unstyled" id="ESS">
-                        <li>
-                            <a href="../view/SSLeaveRequest/index.php" target="content">Self Request Leave</a>
-                        </li>
-                        <li>
-                            <a href="../view/SSLeaveApproval/index.php" target="content">Leave Approval</a>
-                        </li>
-                    </ul>
-                </li> -->
-
-                <!-- Leave -->
-                <li>
-                    <a href="#Leave" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                        <i class="fa fa-users"></i><span lang="km">Leave </span>
-                    </a>
-                    <ul class="collapse list-unstyled" id="Leave">
-                        <!-- <li>
-                            <a href="../view/LeaveBalance/index.php" target="content">Leave Balance</a>
-                        </li> -->
-                        <li>
-                            <a href="../view/LeaveRequest/index.php" target="content">Leave Request</a>
-                        </li>
-                        <li>
-                            <a href="../view/LeaveApproval/index.php" target="content">Leave Approval</a>
-                        </li>
-                    </ul>
-                </li>
-
-                <!-- Payroll -->
-                <li>
-                    <a href="#User" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                        <i class="fa fa-money-bill"></i><span lang="km">Payroll</span>
-                    </a>
-                    <ul class="collapse list-unstyled" id="User">
-                        <li>
-                            <a href="../view/PROvertime/index.php" target="content">Overtime</a>
-                        </li>
-                        <li>
-                            <a href="../view/PRAllowance/index.php" target="content">Allowance</a>
-                        </li>
-                        <li>
-                            <a href="../view/PRBonus/index.php" target="content">Bonus</a>
-                        </li>
-                        <li>
-                            <a href="../view/PRDeduction/index.php" target="content">Deduction</a>
-                        </li>
-                        <li>
-                            <a href="../view/PRGenSalary/index.php" target="content">Generate Salary</a>
-                        </li>
-                        <li>
-                            <a href="../view/PRPayDetail/paydedail.php" target="content">Pay Detail</a>
-                        </li>
-                        <li>
-                            <a href="../view/PRApproveSalary/index.php" target="content">Salary Approval</a>
-                        </li>
-                    </ul>
-                </li>
-
-                <!-- Recruitment -->
-                <!-- <li>
-                    <a href="#Recruite" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                        <i class="fa fa-book"></i><span lang="km">Recruitment</span>
-                    </a>
-                    <ul class="collapse list-unstyled" id="Recruite">
-                        <li>
-                            <a href="../view/RecuitmentApplicant/index.php" target="content">Recruitment Applicant</a>
-                        </li>
-                        <li>
-                            <a href="../view/RecuitmentOnboarding/index.php" target="content">Onboarding</a>
-                        </li>
-                    </ul>
-                </li> -->
-
-                <!-- Report -->
-                <li>
-                    <a href="#Report" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                        <i class="fa fa-book"></i><span lang="km">Report</span>
-                    </a>
-                    <ul class="collapse list-unstyled" id="Report">
-                        <li>
-                            <a href="../view/Report/EmployeeInOut/index.php" target="content">Employee InOut</a>
-                        </li>
-                        <li>
-                            <a href="../view/Report/EmployeeFamily/index.php" target="content">Employee's Family</a>
-                        </li>
-                         <li>
-                            <a href="../view/Report/ReportMonthlyPay/index.php" target="content">Monthly Salary Details</a>
-                        </li>
-                        <li>
-                            <a href="../view/Report/PaySlip/index.php" target="content">PaySlip</a>
-                        </li>
-                        <li>
-                            <a href="../view/Report/MonthlySummary/index.php" target="content">Monthly Summary</a>
-                        </li>
-                        <!-- <li>
-                            <a href="../view/Report/LeaveReport/index.php" target="content">Leave Summary</a>
-                        </li> -->
-                    </ul>
-                </li>
+            <li>
+                <!-- <a href="../view/Dashboard/index.php" target="content">
+                    <i class="fa fa-home"></i>Dasborad
+                </a> -->
+            </li>
 
         </ul>
     </div>

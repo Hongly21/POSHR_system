@@ -8,7 +8,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'btnsave') {
     $hourperday = $_POST['hourperday'];
     $fromdate = $_POST['fromdate'];
     $todate = $_POST['todate'];
-    $hourperweek = $workday * $hourperday;
+
 
     $mon = $_POST['mon'];
     $tues = $_POST['tues'];
@@ -25,24 +25,8 @@ if (isset($_POST['action']) && $_POST['action'] == 'btnsave') {
     $friHours = $_POST['friHours'];
     $satHours = $_POST['satHours'];
     $sunHours = $_POST['sunHours'];
+    $hourperweek = $monHours + $tuesHours + $wedHours + $thurHours + $friHours + $satHours + $sunHours;
 
-    // Get day values (0 if unchecked, 1 if checked)
-    // $mon  = isset($_POST['mon'])  ? 1 : 0;
-    // $tues = isset($_POST['tues']) ? 1 : 0;
-    // $wed  = isset($_POST['wed'])  ? 1 : 0;
-    // $thur = isset($_POST['thur']) ? 1 : 0;
-    // $fri  = isset($_POST['fri'])  ? 1 : 0;
-    // $sat  = isset($_POST['sat'])  ? 1 : 0;
-    // $sun  = isset($_POST['sun'])  ? 1 : 0;
-
-    // // Get hours for each day
-    // $monHours  = $mon  ? floatval($_POST['monHours'])  : 0;
-    // $tuesHours = $tues ? floatval($_POST['tuesHours']) : 0;
-    // $wedHours  = $wed  ? floatval($_POST['wedHours'])  : 0;
-    // $thurHours = $thur ? floatval($_POST['thurHours']) : 0;
-    // $friHours  = $fri  ? floatval($_POST['friHours'])  : 0;
-    // $satHours  = $sat  ? floatval($_POST['satHours'])  : 0;
-    // $sunHours  = $sun  ? floatval($_POST['sunHours'])  : 0;
 
     // Build SQL query
     $sql = "INSERT INTO `prpaypolicy` (

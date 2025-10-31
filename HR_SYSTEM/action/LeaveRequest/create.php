@@ -24,3 +24,4 @@ if ($empid && $leavetype && $fromdate && $todate && $reason && $leaveday) {
 } else {
     echo "All fields are required";
 }
+

@@ -229,8 +229,8 @@ include("../../Config/conect.php");
         height: 3rem;
     }
 </style>
-
 <div class="container-fluid mt-3">
+
     <div class="card">
         <div class="card-header">
             <h5 class="card-header-title">
@@ -304,9 +304,28 @@ include("../../Config/conect.php");
                 $position = $row['PositionName'];
 
                 $sql1 = "SELECT * FROM hisgensalary WHERE EmpCode = '$empcode' AND InMonth = '$month'";
-        
+
 
                 $result1 = $con->query($sql1);
+                if ($result1->num_rows > 0) {
+                    echo "<script>
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Successfully',
+                            text: 'Salary Details of $empName Loaded Successfully',
+                            showConfirmButton: true
+                        })
+                    </script>";
+                } else {
+                    echo "<script>
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Salary Details of $empName Not Found',
+                            showConfirmButton: true
+                        })
+                    </script>";
+                }
                 $row1 = $result1->fetch_assoc();
                 $empcode = $row1['EmpCode'];
                 // $department = $row1['Department'];
@@ -341,10 +360,8 @@ include("../../Config/conect.php");
                 $NSSF = '';
                 $NetSalary = '';
             }
-
-
-
             ?>
+
 
 
             <!-- Employee Details Section -->
@@ -353,22 +370,23 @@ include("../../Config/conect.php");
                     <h6 class="mb-0">Employee Information</h6>
                 </div>
                 <div class="detail-body">
+
                     <div class="row">
                         <div class="col-md-3">
                             <p class="info-label">Employee Code:</p>
-                            <p id="empCode"><?php echo $empcode; ?></p>
+                            <b id="empCode"><?php echo $empcode; ?></b>
                         </div>
                         <div class="col-md-3">
                             <p class="info-label">Employee Name:</p>
-                            <p id="empName"><?php echo $empName; ?></p>
+                            <b id="empName"><?php echo $empName; ?></b>
                         </div>
                         <div class="col-md-3">
                             <p class="info-label">Department:</p>
-                            <p id="department"><?php echo $department; ?></p>
+                            <b id="department"><?php echo $department; ?></b>
                         </div>
                         <div class="col-md-3">
                             <p class="info-label">Position:</p>
-                            <p id="position"><?php echo $position; ?> </p>
+                            <b id="position"><?php echo $position; ?> </b>
                         </div>
                     </div>
                 </div>
@@ -432,6 +450,9 @@ include("../../Config/conect.php");
                                 <th colspan="2" class="text-end">Total Net Pay:</th>
                                 <th id="totalNetPay" class="salary-amount">$<?php echo $NetSalary; ?></th>
                             </tr>
+                            <a href="exportPDF.php?empCode=<?= $empcode ?>&month=<?= $month ?>" target="_blank" class="btn btn-danger mt-3">
+                                <i class="fas fa-file-pdf"></i> Export to PDF
+                            </a>
                         </tfoot>
                     </table>
                 </div>
@@ -451,10 +472,6 @@ include("../../Config/conect.php");
             var month = $('#month').val();
 
             window.location.href = 'paydedail.php?empCode=' + empCode + '&month=' + month;
-
-
-
-
 
 
         })

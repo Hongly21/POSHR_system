@@ -3,217 +3,166 @@ include("../../../root/Header.php");
 include("../../../Config/conect.php");
 ?>
 
-
-
 <style>
-    :root {
-        --primary-color: #6366f1;
-        /* Modern indigo */
-        --secondary-color: #4f46e5;
-        /* Deeper indigo */
-        --success-color: #10b981;
-        /* Fresh emerald */
-        --warning-color: #f59e0b;
-        /* Warm amber */
-        --danger-color: #ef4444;
-        /* Vibrant red */
-        --info-color: #3b82f6;
-        /* Bright blue */
-        --border-color: #e2e8f0;
-        /* Cool gray */
-        --bg-light: #f8fafc;
-        /* Slate 50 */
-        --bg-dark: #1e293b;
-        /* Slate 800 */
-        --text-primary: #0f172a;
-        /* Slate 900 */
-        --text-secondary: #475569;
-        /* Slate 600 */
-        --text-light: #94a3b8;
-        /* Slate 400 */
-        --gradient-start: #818cf8;
-        /* Indigo 400 */
-        --gradient-end: #6366f1;
-        /* Indigo 500 */
-        --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-        --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-        --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+    /* General Container */
+    .container-fluid {
+        background-color: #f5f6fa;
+        padding: 20px;
+        border-radius: 12px;
     }
 
-    .filter-section {
-        background: var(--bg-light);
-        padding: 1.5rem;
-        border-radius: 1rem;
-        margin-bottom: 1.5rem;
-        border: 1px solid var(--border-color);
-        box-shadow: var(--shadow-sm);
+    /* Card Style */
+    .card {
+        border: none;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+        border-radius: 12px;
+        background-color: #fff;
+        overflow: hidden;
     }
 
-    .detail-card {
-        background: white;
-        border-radius: 1rem;
-        box-shadow: var(--shadow-md);
-        margin-bottom: 1.5rem;
-        border: 1px solid var(--border-color);
-        transition: all 0.3s ease;
+    /* Header */
+    .card-header {
+        background: linear-gradient(90deg, #007bff, #0056b3);
+        color: #fff;
+        padding: 15px 20px;
     }
 
-    .detail-card:hover {
-        box-shadow: var(--shadow-lg);
-        transform: translateY(-2px);
-    }
-
-    .detail-header {
-        background: var(--bg-light);
-        padding: 1.25rem;
-        border-bottom: 1px solid var(--border-color);
-        border-radius: 1rem 1rem 0 0;
-    }
-
-    .detail-header h6 {
-        color: var(--text-primary);
+    .card-header-title {
+        font-size: 18px;
         font-weight: 600;
         margin: 0;
-        font-size: 1.1rem;
     }
 
-    .detail-body {
-        padding: 1.5rem;
+    .card-header-title i {
+        margin-right: 8px;
     }
 
-    .info-label {
+    /* Filter Section */
+    .filter-section {
+        background-color: #f8f9fa;
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 10px;
+    }
+
+    .filter-section label {
         font-weight: 600;
-        color: var(--text-secondary);
-        margin-bottom: 0.5rem;
-        font-size: 0.9rem;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
+        color: #333;
     }
 
-
-
-    /* Form Controls */
-    .form-select,
-    .form-control {
-        border-radius: 0.5rem;
-        border: 1px solid var(--border-color);
-        padding: 0.75rem 1rem;
-        font-size: 0.95rem;
-        color: var(--text-primary);
-        background-color: white;
-        transition: all 0.2s ease;
+    .filter-section .form-control,
+    .filter-section .form-select {
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        transition: all 0.2s ease-in-out;
     }
 
-    .form-select:hover,
-    .form-control:hover {
-        border-color: var(--text-light);
+    .filter-section .form-control:focus,
+    .filter-section .form-select:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
     }
 
-    .form-select:focus,
-    .form-control:focus {
-        border-color: var(--primary-color);
-        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
-        outline: none;
-    }
-
-    /* Button Styles */
-    .btn-primary {
-        background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-        border: none;
-        border-radius: 0.5rem;
-        padding: 0.75rem 1.5rem;
+    /* Buttons */
+    .btn {
+        border-radius: 8px;
+        padding: 8px 15px;
         font-weight: 500;
-        color: white;
-        font-size: 0.95rem;
-        transition: all 0.2s ease;
-        box-shadow: 0 2px 4px rgba(99, 102, 241, 0.1);
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border: none;
+        transition: background 0.3s ease;
     }
 
     .btn-primary:hover {
-        background: linear-gradient(135deg, var(--gradient-end), var(--gradient-start));
-        transform: translateY(-1px);
-        box-shadow: 0 4px 6px rgba(99, 102, 241, 0.2);
+        background-color: #0056b3;
     }
 
-    .btn-primary:active {
-        transform: translateY(0);
-        box-shadow: 0 1px 2px rgba(99, 102, 241, 0.2);
+    .btn-secondary {
+        background-color: #6c757d;
+        border: none;
     }
 
-    /* Table Styles */
+    .btn-secondary:hover {
+        background-color: #5a6268;
+    }
+
+    /* Table Section */
+    .detail-card {
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        background-color: #fff;
+        overflow-x: auto;
+    }
+
+    .detail-header {
+        background-color: #007bff;
+        color: white;
+        padding: 10px 15px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+
+    .detail-header h6 {
+        font-weight: 600;
+        margin: 0;
+    }
+
     .table {
-        border-radius: 0.5rem;
+        margin: 0;
+        border-radius: 10px;
         overflow: hidden;
-        border: 1px solid var(--border-color);
-        background: white;
     }
 
-    .table thead {
-        background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-    }
-
-    .table thead th {
-        color: purple !important;
+    .table th {
+        background-color: #f1f1f1;
+        color: #333;
         font-weight: 600;
-        text-transform: uppercase;
-        font-size: 0.85rem;
-        letter-spacing: 0.5px;
-        padding: 1.25rem 1rem;
-        border-bottom: none;
+        text-align: center;
         vertical-align: middle;
-        text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
     }
 
-    .table tbody td {
-        padding: 0.5rem 1rem;
+    .table td {
         vertical-align: middle;
-        border-bottom: 1px solid var(--border-color);
-        color: var(--text-primary);
-        font-size: 0.95rem;
+        text-align: center;
+        color: #555;
     }
 
-    .table tbody tr:hover {
-        background-color: var(--bg-light);
+    /* Hover effect */
+    .table-hover tbody tr:hover {
+        background-color: #f8f9fa;
+        transition: background 0.3s ease;
     }
 
-    .table tfoot tr {
-        background-color: var(--bg-light);
-        font-weight: 600;
+    /* Action button inside table */
+    .table .btn-primary {
+        background-color: #17a2b8;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 6px;
     }
 
-    .table tfoot th {
-        padding: 0.5rem 1rem;
-        color: purple
+    .table .btn-primary:hover {
+        background-color: #138496;
     }
 
-    /* Status Colors */
-    .status-active {
-        color: var(--success-color);
-        background-color: rgba(16, 185, 129, 0.1);
-        border-radius: 0.375rem;
-        padding: 0.25rem 0.75rem;
-        font-weight: 500;
+    /* SweetAlert style override (optional) */
+    .swal2-popup {
+        border-radius: 12px !important;
     }
 
-    .status-pending {
-        color: var(--warning-color);
-        background-color: rgba(245, 158, 11, 0.1);
-        border-radius: 0.375rem;
-        padding: 0.25rem 0.75rem;
-        font-weight: 500;
-    }
-
-
-
-    /* Loading Spinner */
-    #loadingSpinner .spinner-border {
-        color: var(--primary-color);
-        width: 3rem;
-        height: 3rem;
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .filter-section .row>div {
+            margin-bottom: 15px;
+        }
     }
 </style>
 
-<div class="container-fluid mt-3">
+<h2 style="text-align: center; margin-top: 15px; text-transform: uppercase;">Employee InOut Report</h2>
+<div class="container-fluid mt-3" style="max-width: 1200px;">
     <div class="card">
         <div class="card-header">
             <h5 class="card-header-title">
@@ -269,7 +218,6 @@ include("../../../Config/conect.php");
                     </div>
                 </div>
             </div>
-
             <!-- Report Table Section -->
             <div class="detail-card mt-4">
                 <div class="detail-header d-flex justify-content-between align-items-center">
@@ -303,7 +251,7 @@ include("../../../Config/conect.php");
                                     <script>
                                         Swal.fire({
                                             title: 'Success',
-                                            text: 'Report Generated Successfully',
+                                            text: 'Report on " . $startDate . " to " . $endDate . " Generated Successfully',
                                             icon: 'success',
                                             confirmButtonColor: '#3085d6',
                                             confirmButtonText: 'OK'
@@ -458,7 +406,7 @@ view Detail modal  -->
 
 
 <div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered" style=" max-width: 800px;">
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="exampleModalToggleLabel">

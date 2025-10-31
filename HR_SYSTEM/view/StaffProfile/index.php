@@ -64,7 +64,6 @@ include '../../Config/conect.php';
 </style>
 <h3 class="text-center" style="margin-top: 15px; text-transform: uppercase;">Staff Profile</h3>
 <div class="container" style="margin-top: 15px; border: 0.4px solid #ccc;  padding: 20px; border-radius: 5px;">
-
     <table class="table" id="example" border="1">
         <!-- <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#AddstaffModal" style="margin-bottom: 8px; font-size: 14px; ">
             Add New
@@ -75,6 +74,10 @@ include '../../Config/conect.php';
             <button class="btn btn-sm btn-success me-2" style="margin-bottom: 8px; font-size: 14px;"> <i class="fa fa-plus" style="margin-right: 4px;"></i> Add New </button>
 
         </a>
+        <!-- export -->
+        <button class="btn btn-sm btn-warning me-2 btnExport" style="margin-bottom: 8px; font-size: 14px;" id="export"> <i class="fa fa-file-excel" style="margin-right: 4px;"></i> Export Excel </button>
+        <button class="btn btn-sm btn-danger me-2 btnExportpdf" style="margin-bottom: 8px; font-size: 14px;" id="exportPDF"> <i class="fa fa-file-pdf" style="margin-right: 4px;"></i> Export PDF </button>
+
 
         <thead>
             <tr>
@@ -115,7 +118,7 @@ include '../../Config/conect.php';
                          " style="font-size: 13px;" class="btn btn-warning editButton"><i class="fa fa-edit"></i></a>
                         <button style="font-size: 13px;" class="btn btn-danger " onclick="deleteCompany('<?php echo $row['EmpCode']; ?>')"><i class="fa fa-trash"></i></button>
                     </td>
-                    <td><img src="../../assets/images/<?php echo $row['Photo']; ?>" style="width: 60px; height: 60px;"></td>
+                    <td><img src="../../assets/images/<?php echo $row['Photo']; ?>" style="width: 60px; height: 60px; border-radius: 50%;"></td>
                     <td><?php echo $row['EmpCode']; ?></td>
                     <td><?php echo $row['EmpName']; ?></td>
                     <td><?php echo $row['CompanyName']; ?></td>
@@ -181,6 +184,14 @@ include '../../Config/conect.php';
             $('#codeupdate').val(code);
 
         })
+        $('.btnExport').click(function() {
+            window.location.href = 'exportExcel.php';
+        })
+        $('.btnExportpdf').click(function() {
+            window.location.href = 'exportPDF.php';
+            
+        })
+
 
     });
 </script>

@@ -1,18 +1,11 @@
 <?php
 include '../../Config/conect.php';
-session_start();
-// Generate CSRF token if not exists
-if (!isset($_SESSION['csrf_token'])) {
-    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-}
-// Redirect if already logged in
-// if (isset($_SESSION['user'])) {
-//     header('Location: /PHP8/HR_SYSTEM/index.php');
-//     exit;
-// }
+include '../../root/Header.php';
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -33,6 +26,7 @@ if (!isset($_SESSION['csrf_token'])) {
             min-height: 100vh;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
+
         .login-container {
             background: rgba(255, 255, 255, 0.95);
             border-radius: 15px;
@@ -41,23 +35,28 @@ if (!isset($_SESSION['csrf_token'])) {
             width: 100%;
             max-width: 400px;
         }
+
         .login-header {
             text-align: center;
             margin-bottom: 2rem;
         }
+
         .login-header img {
             width: 80px;
             margin-bottom: 1rem;
         }
+
         .form-control {
             border-radius: 10px;
             padding: 0.75rem 1rem;
             border: 1px solid #ddd;
         }
+
         .form-control:focus {
             box-shadow: 0 0 0 0.25rem rgba(102, 126, 234, 0.25);
             border-color: #667eea;
         }
+
         .btn-login {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border: none;
@@ -68,12 +67,14 @@ if (!isset($_SESSION['csrf_token'])) {
             margin-top: 1rem;
             transition: all 0.3s ease;
         }
+
         .btn-login:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
     </style>
 </head>
+
 <body>
     <div class="login-container">
         <div class="login-header">
@@ -81,9 +82,9 @@ if (!isset($_SESSION['csrf_token'])) {
             <h3>Welcome Back</h3>
             <p class="text-muted">Please login to your account</p>
         </div>
-        
-        <form id="loginForm" action="../../action/Login/login.php" method="POST">
-            
+
+        <form id="loginForm" method="POST">
+
             <div class="mb-3">
                 <label for="username" class="form-label">Username</label>
                 <input type="text" class="form-control" id="username" name="username" required>
@@ -94,52 +95,72 @@ if (!isset($_SESSION['csrf_token'])) {
                 <input type="password" class="form-control" id="password" name="password" required>
             </div>
 
-            <button type="submit" class="btn btn-primary btn-login">
+            <button type="button" class="btn btn-primary" id="loginButton">
                 <i class="fas fa-sign-in-alt me-2"></i>Login
             </button>
         </form>
     </div>
 
-    <!-- SweetAlert2 -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
+
     <script>
-    document.getElementById('loginForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const formData = new FormData(this);
-        
-        fetch(this.action, {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success!',
-                    text: data.message,
-                    showConfirmButton: false,
-                    timer: 1500
-                }).then(() => {
-                    window.top.location.href = '../../index.php';
-                });
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: data.message
-                });
-            }
-        })
-        .catch(error => {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'An error occurred while processing your request.'
+        $(document).ready(function() {
+            $('#loginButton').click(function() {
+                var username = $('#username').val();
+                var password = $('#password').val();
+
+                if (username === 'admin') {
+                    $.post('../../action/Login/login.php', {
+                        action: 'adminSMS',
+                        username: username,
+                        password: password
+                    }, function(response) {
+                        if (response === 'success') {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: 'Login successfully!',
+                            }).then(() => {
+                                window.location.href = '../../index.php';
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Invalid username or password.',
+                            });
+                        }
+                    });
+                } else {
+                    $.post('../../action/Login/login.php', {
+                        action: 'userSMS',
+                        username: username,
+                        password: password
+                    }, function(response) {
+                        if (response === 'success') {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: username + ' User Login successfully!',
+                            }).then(() => {
+                                window.location.href = '../../../User/HR_SYSTEM/index.php?username=' + encodeURIComponent(username.trim());
+
+
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Invalid username or password.',
+                            });
+                        }
+                    });
+                }
             });
+
+
         });
-    });
     </script>
+
 </body>
+
 </html>

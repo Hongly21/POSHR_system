@@ -1,5 +1,5 @@
 <?php
-session_start();
+include("../../root/Header.php");
 include("../../Config/conect.php");
 ?>
 
@@ -14,42 +14,39 @@ include("../../Config/conect.php");
             <th>Last Login</th>
         </tr>
     </thead>
-    <tbody id="data">
+    <tbody>
         <?php
         $sql = "SELECT * FROM hrusers ORDER BY CreatedAt DESC";
         $result = $con->query($sql);
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
         ?>
-                <tr data-id="<?php echo $row['UserID']; ?>">
+                <tr>
                     <td>
                         <?php
-                        if ($row['Username'] != "admin") {
+                        if ($row['Username'] !== 'admin') {
                         ?>
-                            <button class="btn btn-danger btn-sm delete-user-btn" data-id="<?php echo $row['UserID']; ?>">
-                                <i class="fas fa-trash"></i> Delete
-                            </button>
-
-                        <?php
-                        }
-                        ?>
-                        <?php if (!isset($_SESSION['UserID']) || $row['UserID'] != $_SESSION['UserID']) { ?>
-                            <button class="btn btn-primary btn-sm edit-user-btn"
+                            <button class="btn btn-primary editButton" data-bs-toggle="modal" data-bs-target="#editUserModal"
                                 data-id="<?php echo $row['UserID']; ?>"
                                 data-username="<?php echo $row['Username']; ?>"
                                 data-email="<?php echo $row['Email']; ?>"
                                 data-role="<?php echo $row['Role']; ?>"
                                 data-status="<?php echo $row['Status']; ?>">
-                                <i class="fas fa-edit"></i> Edit
+                                <i class="fas fa-user-edit me-2"></i> <i class="fas fa-edit"></i>
                             </button>
-                        <?php } ?>
+                        <?php
+                        }
+                        ?>
+                        <button class="btn btn-danger" onclick="deleteUser(<?php echo $row['UserID']; ?>)">
+                            <i class="fas fa-user-times me-2"></i> <i class="fas fa-trash"></i>
+                        </button>
                     </td>
-                    <td><?php echo htmlspecialchars($row['Username']); ?></td>
-                    <td><?php echo htmlspecialchars($row['Email']); ?></td>
+                    <td><?php echo ($row['Username']); ?></td>
+                    <td><?php echo ($row['Email']); ?></td>
                     <td>
                         <span class="badge bg-<?php echo $row['Role'] === 'admin' ? 'danger' : ($row['Role'] === 'manager' ? 'warning' :
-                                                        'info'); ?>"><?php echo ucfirst($row['Role']);
-                                    ?>
+                                                    'info'); ?>"><?php echo ucfirst($row['Role']);
+                                        ?>
                         </span>
                     </td>
                     <td><span class="badge bg-<?php echo $row['Status'] === 'active' ? 'success' : 'secondary'; ?>"><?php echo ucfirst($row['Status']); ?></span></td>
@@ -83,8 +80,7 @@ include("../../Config/conect.php");
                                 <i class="fas fa-at text-muted"></i>
                             </span>
                             <input type="text" class="form-control border-start-0" id="username" required
-                                placeholder="Enter username" maxlength="50" pattern="[a-zA-Z0-9_]+">
-                            <div class="invalid-feedback">Please provide a valid username (letters, numbers, and underscore only).</div>
+                                placeholder="Enter username / Must be same as your real name" maxlength="50" pattern="[a-zA-Z0-9_]+">
                         </div>
                     </div>
                     <div class="mb-4">
@@ -97,7 +93,6 @@ include("../../Config/conect.php");
                             </span>
                             <input type="email" class="form-control border-start-0" id="email" required
                                 placeholder="Enter email address" maxlength="100">
-                            <div class="invalid-feedback">Please provide a valid email address.</div>
                         </div>
                     </div>
                     <div class="mb-4">
@@ -113,7 +108,6 @@ include("../../Config/conect.php");
                             <button class="btn btn-outline-secondary toggle-password" type="button">
                                 <i class="fas fa-eye"></i>
                             </button>
-                            <div class="invalid-feedback">Password must be at least 8 characters long.</div>
                         </div>
                     </div>
                     <div class="mb-4">
@@ -174,7 +168,6 @@ include("../../Config/conect.php");
                             </span>
                             <input type="text" class="form-control border-start-0" id="edit_username" required
                                 placeholder="Enter username" maxlength="50" pattern="[a-zA-Z0-9_]+">
-                            <div class="invalid-feedback">Please provide a valid username (letters, numbers, and underscore only).</div>
                         </div>
                     </div>
                     <div class="mb-4">
@@ -187,7 +180,6 @@ include("../../Config/conect.php");
                             </span>
                             <input type="email" class="form-control border-start-0" id="edit_email" required
                                 placeholder="Enter email address" maxlength="100">
-                            <div class="invalid-feedback">Please provide a valid email address.</div>
                         </div>
                     </div>
                     <div class="mb-4">
@@ -227,6 +219,7 @@ include("../../Config/conect.php");
                             <option value="inactive">Inactive</option>
                         </select>
                     </div>
+                    <input type="hidden" id='iduser' value="">
                 </form>
             </div>
             <div class="modal-footer border-0 pt-0">
@@ -254,55 +247,120 @@ include("../../Config/conect.php");
 <script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
 <script>
-    $(document).ready(function() {
-        // Initialize DataTable for Users
-        let userTable;
-        if (!$.fn.DataTable.isDataTable('#UserTable')) {
-            userTable = $('#UserTable').DataTable({
-                responsive: true,
-                lengthChange: true,
-                autoWidth: false,
-                order: [
-                    [1, 'asc']
-                ] // Sort by Username by default
-            });
+    $('#saveUser').click(function() {
+        var username = $('#username').val();
+        var email = $('#email').val();
+        var password = $('#password').val();
+        var role = $('#role').val();
+        var status = $('#status').val();
+
+        if (username && email && password && role && status) {
+            if (password.length < 8) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Password must be at least 8 characters long.',
+                });
+                return false;
+            } else if (email.indexOf("@") == -1 || email.indexOf(".") == -1) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Please enter a valid email address.',
+                });
+                return false;
+            } else {
+                $.ajax({
+                    url: '../../action/User/create.php',
+                    method: 'POST',
+                    data: {
+                        username: username,
+                        email: email,
+                        password: password,
+                        role: role,
+                        status: status
+                    },
+                    success: function(response) {
+                        if (response == 'success') {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: 'User has been created successfully!',
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = 'index.php';
+                                }
+                            })
+
+                        } else if (response == 'nameexists') {
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Error',
+                                text: 'Username already exists!',
+                            });
+
+                        } else if (response == 'mailexists') {
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Error',
+                                text: 'Email already exists!',
+                            });
+
+                        } else if (response == 'cannotuse') {
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Error',
+                                text: 'Can not use this password',
+                            })
+
+                        } else if (response == 'error') {
+                            alert('Error creating user.');
+                        }
+                    }
+
+                })
+            }
         } else {
-            userTable = $('#UserTable').DataTable();
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Please fill in all required fields.',
+            });
+            return false;
         }
 
-        // Toggle password visibility
-        $('.toggle-password').click(function() {
-            const passwordField = $(this).siblings('input[type="password"]');
-            const icon = $(this).find('i');
+    })
 
-            if (passwordField.attr('type') === 'password') {
-                passwordField.attr('type', 'text');
-                icon.removeClass('fa-eye').addClass('fa-eye-slash');
-            } else {
-                passwordField.attr('type', 'password');
-                icon.removeClass('fa-eye-slash').addClass('fa-eye');
-            }
-        });
+    $('.editButton').click(function() {
+        var username = $(this).data('username');
+        var email = $(this).data('email');
+        var role = $(this).data('role');
+        var status = $(this).data('status');
+        var id = $(this).data('id');
 
-        // Add new User
-        $('#saveUser').click(function() {
-            if (!$('#addUserForm')[0].checkValidity()) {
-                $('#addUserForm')[0].reportValidity();
-                return;
-            }
 
-            const username = $('#username').val();
-            const email = $('#email').val();
-            const password = $('#password').val();
-            const role = $('#role').val();
-            const status = $('#status').val();
+        $('#edit_username').val(username);
+        $('#edit_email').val(email);
+        $('#edit_role').val(role);
+        $('#edit_status').val(status);
+        $('#iduser').val(id);
+
+        $('#updateUser').click(function() {
+            var id = $('#iduser').val();
+            var username = $('#edit_username').val();
+            var email = $('#edit_email').val();
+            var password = $('#edit_password').val();
+            var role = $('#edit_role').val();
+            var status = $('#edit_status').val();
 
             $.ajax({
-                url: "../../action/User/create.php",
-                type: "POST",
+                url: '../../action/User/update.php',
+                method: 'POST',
                 data: {
-                    type: "User",
+                    id: id,
                     username: username,
                     email: email,
                     password: password,
@@ -310,239 +368,76 @@ include("../../Config/conect.php");
                     status: status
                 },
                 success: function(response) {
-                    try {
-                        const jsonResponse = typeof response === 'string' ? JSON.parse(response) : response;
-                        if (jsonResponse.status === 'success') {
-                            // Add new row to DataTable
-                            userTable.row.add([
-                                `<div class="btn-group">
-                                <button class="btn btn-primary btn-sm edit-user-btn" 
-                                    data-id="${jsonResponse.id}" 
-                                    data-username="${username}"
-                                    data-email="${email}"
-                                    data-role="${role}"
-                                    data-status="${status}">
-                                    <i class="fas fa-edit"></i> Edit
-                                </button>
-                                <button class="btn btn-danger btn-sm delete-user-btn" data-id="${jsonResponse.id}">
-                                    <i class="fas fa-trash"></i> Delete
-                                </button>
-                            </div>`,
-                                username,
-                                email,
-                                `<span class="badge bg-${role === 'admin' ? 'danger' : (role === 'manager' ? 'warning' : 'info')}">${role}</span>`,
-                                `<span class="badge bg-${status === 'active' ? 'success' : 'secondary'}">${status}</span>`,
-                                'Never'
-                            ]).draw(false);
-
-                            // Hide modal and clean up
-                            $('#addUserModal').modal('hide');
-                            $('body').removeClass('modal-open');
-                            $('.modal-backdrop').remove();
-
-                            // Clear form
-                            $('#username').val('');
-                            $('#email').val('');
-                            $('#password').val('');
-                            $('#role').val('');
-
-                            showToast('success', jsonResponse.message || 'User added successfully');
-                        } else {
-                            showToast('error', jsonResponse.message || 'Error adding user');
-                        }
-                    } catch (e) {
-                        showToast('error', 'Error processing server response');
-                    }
-                },
-                error: function(xhr) {
-                    showToast('error', xhr.responseText || 'Error adding user');
-                }
-            });
-        });
-
-        // Edit button click handler for Users
-        $(document).on('click', '.edit-user-btn', function() {
-            const id = $(this).data('id');
-            const username = $(this).data('username');
-            const email = $(this).data('email');
-            const role = $(this).data('role');
-            const status = $(this).data('status');
-
-            $('#edit_user_id').val(id);
-            $('#edit_username').val(username);
-            $('#edit_email').val(email);
-            $('#edit_role').val(role);
-            $('#edit_status').val(status);
-            $('#edit_password').val(''); // Clear password field
-
-            $('#editUserModal').modal('show');
-        });
-
-        // Update User
-        $('#updateUser').click(function() {
-            if (!$('#editUserForm')[0].checkValidity()) {
-                $('#editUserForm')[0].reportValidity();
-                return;
-            }
-
-            const id = $('#edit_user_id').val();
-            const username = $('#edit_username').val();
-            const email = $('#edit_email').val();
-            const password = $('#edit_password').val();
-            const role = $('#edit_role').val();
-            const status = $('#edit_status').val();
-
-            // Get current logged-in user ID from PHP session
-            const currentUserId = "<?php echo $_SESSION['UserID'] ?? ''; ?>";
-
-            $.ajax({
-                url: "../../action/User/update.php",
-                type: "POST",
-                data: {
-                    type: "User",
-                    id: id,
-                    username: username,
-                    email: email,
-                    password: password, // Will be handled server-side if empty
-                    role: role,
-                    status: status
-                },
-                success: function(response) {
-                    try {
-                        const jsonResponse = typeof response === 'string' ? JSON.parse(response) : response;
-                        if (jsonResponse.status === 'success') {
-                            // Update row in DataTable
-                            const row = $(`button[data-id="${id}"]`).closest('tr');
-                            userTable.row(row).data([
-                                `<div class="btn-group">
-                            <button class="btn btn-primary btn-sm edit-user-btn" 
-                                data-id="${id}" 
-                                data-username="${username}"
-                                data-email="${email}"
-                                data-role="${role}"
-                                data-status="${status}">
-                                <i class="fas fa-edit"></i> Edit
-                            </button>
-                            ${id != currentUserId ? `
-                            <button class="btn btn-danger btn-sm delete-user-btn" data-id="${id}">
-                                <i class="fas fa-trash"></i> Delete
-                            </button>` : ''}
-                        </div>`,
-                                username,
-                                email,
-                                `<span class="badge bg-${role === 'admin' ? 'danger' : (role === 'manager' ? 'warning' : 'info')}">${role}</span>`,
-                                `<span class="badge bg-${status === 'active' ? 'success' : 'secondary'}">${status}</span>`,
-                                row.find('td:last').text() // Preserve last login time
-                            ]).draw(false);
-
-                            // Hide modal and clean up
-                            $('#editUserModal').modal('hide');
-                            $('body').removeClass('modal-open');
-                            $('.modal-backdrop').remove();
-
-                            showToast('success', jsonResponse.message || 'User updated successfully');
-                        } else {
-                            showToast('error', jsonResponse.message || 'Error updating user');
-                        }
-                    } catch (e) {
-                        showToast('error', 'Error processing server response');
-                    }
-                },
-                error: function(xhr) {
-                    showToast('error', xhr.responseText || 'Error updating user');
-                }
-            });
-        });
-
-
-        // Delete User
-        $(document).on('click', '.delete-user-btn', function() {
-            const row = $(this).closest('tr');
-            const id = $(this).data('id');
-
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "This will permanently delete the user account!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url: "../../action/User/delete.php",
-                        type: "POST",
-                        data: {
-                            type: "User",
-                            id: id
-                        },
-                        success: function(response) {
-                            try {
-                                const jsonResponse = typeof response === 'string' ? JSON.parse(response) : response;
-                                if (jsonResponse.status === 'success') {
-                                    userTable.row(row).remove().draw(false);
-                                    showToast('success', jsonResponse.message || 'User deleted successfully');
-                                } else {
-                                    showToast('error', jsonResponse.message || 'Error deleting user');
-                                }
-                            } catch (e) {
-                                showToast('error', 'Error processing server response');
+                    if (response == 'success') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: 'User has been updated successfully!',
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = 'index.php';
                             }
-                        },
-                        error: function(xhr) {
-                            showToast('error', xhr.responseText || 'Error deleting user');
+                        })
+                    } else if (response == 'passwordnotmatch') {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Error',
+                            text: 'Password not match!',
+                        });
+
+                    } else if (response == 'enterpassword') {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Error',
+                            text: 'Please enter password!',
+                        });
+
+                    } else if (response == 'error') {
+                        alert('Error updating user.');
+                    }
+                }
+            })
+        });
+
+    })
+</script>
+
+<script>
+    //function delete 
+    function deleteUser(id) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '../../action/User/delete.php',
+                    method: 'POST',
+                    data: {
+                        id: id
+                    },
+                    success: function(response) {
+                        if (response == 'success') {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: 'User has been deleted successfully!',
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = 'index.php';
+                                }
+                            })
+                        } else {
+                            alert('Error deleting user.');
                         }
-                    });
-                }
-            });
-        });
-
-        // Form validation
-        const forms = document.querySelectorAll('.needs-validation');
-        Array.from(forms).forEach(form => {
-            form.addEventListener('submit', event => {
-                if (!form.checkValidity()) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                }
-                form.classList.add('was-validated');
-            }, false);
-        });
-
-        // Input animation
-        $('.form-control').on('focus', function() {
-            $(this).closest('.input-group').addClass('focused');
-        }).on('blur', function() {
-            $(this).closest('.input-group').removeClass('focused');
-        });
-
-        // Helper function for showing toasts
-        function showToast(icon, title) {
-            const Toast = Swal.mixin({
-                toast: true,
-                position: "top-right",
-                showConfirmButton: false,
-                timer: 5000,
-                timerProgressBar: true,
-                didOpen: (toast) => {
-                    toast.onmouseenter = Swal.stopTimer;
-                    toast.onmouseleave = Swal.resumeTimer;
-                },
-                willClose: () => {
-                    $('.swal2-container').remove();
-                },
-                customClass: {
-                    popup: 'colored-toast',
-                    timerProgressBar: 'timer-progress'
-                },
-                iconColor: '#fff',
-                background: icon === 'success' ? '#4CAF50' : icon === 'error' ? '#F44336' : '#2196F3'
-            });
-            Toast.fire({
-                icon,
-                title
-            });
-        }
-    });
+                    }
+                })
+            }
+        })
+    }
 </script>

@@ -2,11 +2,6 @@
 include("../../root/Header.php");
 include("../../Config/conect.php");
 
-// Check if user has permission
-// if (!isset($_SESSION['user_id'])) {
-//     header("Location: ../../login.php");
-//     exit;
-// }
 
 // Fetch dashboard data
 $currentYear = date('Y');

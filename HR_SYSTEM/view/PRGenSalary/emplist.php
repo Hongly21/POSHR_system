@@ -112,7 +112,7 @@ include('../../Config/conect.php');
             Swal.fire({
                 icon: 'success',
                 title: 'Success',
-                text: 'Salary Generated Successfully',
+                text: 'Salary Generated Successfully in $_GET[monthgenerate]',
                 showConfirmButton: true
             })
         </script>";
@@ -121,7 +121,7 @@ include('../../Config/conect.php');
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
-                text: 'This month is already generated',
+                text: 'On $_GET[invalidmonth] is already generated',
                 showConfirmButton: true
             })
         </script>";
