@@ -6,7 +6,7 @@ include("../../root/DataTable.php");
 
 <style>
     /* Container Styling */
- 
+
     .container {
         margin-top: 15px;
         border: 1px solid #ddd;
@@ -178,7 +178,7 @@ include("../../root/DataTable.php");
     }
 </style>
 
-<h3 class="text-center">PAROLL SETTING</h3>
+<h2 style="margin-top: 10px; text-transform: uppercase; text-align: center;"> PAROLL SETTING</h2>
 <div class="container" style="margin-top: 15px; border: 0.4px solid #ccc;  padding: 20px; border-radius: 5px;">
     <table class="display" id="example">
         <button class="btn btn-sm btn-success me-2" style="margin-bottom: 10px;"><i style="margin-right: 10px;" class="fas fa-plus"></i>

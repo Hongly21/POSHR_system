@@ -16,7 +16,7 @@ $result = $con->query($sql);
                 <div class="card">
                     <div class="card-header">
                         <div class="d-flex justify-content-between align-items-center">
-                            <h4 class="mb-0">Leave List</h4>
+                            <h4 class="mb-0">Leave List Employee </h4>
                         </div>
                     </div>
                     <div class="card-body">
@@ -88,7 +88,7 @@ $result = $con->query($sql);
                     Swal.fire({
                         icon: 'success',
                         title: 'You have approve successfully',
-             
+
                     }).then(() => {
                         location.reload();
                     });
@@ -117,7 +117,7 @@ $result = $con->query($sql);
                     Swal.fire({
                         icon: 'success',
                         title: 'You have reject successfully',
-                  
+
                     }).then(() => {
                         location.reload();
                     });
