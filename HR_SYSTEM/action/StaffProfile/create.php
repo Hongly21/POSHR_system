@@ -99,20 +99,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
         }
-        //documents 
-        if (!empty($_POST['document'])) {
-            $documents = json_decode($_POST['document'], true);
-            foreach ($documents as $document) {
-                $docType = $document['docType'];
-                $description = $document['description'];
 
+
+
+
+
+
+
+        //documents 
+        // documents (handle files and metadata properly)
+        if (isset($_POST['document'])) {
+
+            foreach ($_POST['document'] as $index => $doc) {
+                $docType = $doc['docType'] ?? '';
+                $description = $doc['description'] ?? '';
+                $filePath = '';
+
+                // Check if this document has a file uploaded
+                if (isset($_FILES['document']['name'][$index]['docFile']) && !empty($_FILES['document']['name'][$index]['docFile'])) {
+                    $fileName = time() . '_' . basename($_FILES['document']['name'][$index]['docFile']);
+                    $tmpName  = $_FILES['document']['tmp_name'][$index]['docFile'];
+                    $uploadDir = "../../assets/documents/";
+                    if (!is_dir($uploadDir)) {
+                        mkdir($uploadDir, 0777, true);
+                    }
+                    $filePath = $uploadDir . $fileName;
+                    move_uploaded_file($tmpName, $filePath);
+                }
+
+                // Insert into database
                 if ($docType && $description) {
-                    $sql = "INSERT INTO `hrstaffdocument` (`EmpCode`, `DocType`, `Description`)
-             VALUES ('$empCode', '$docType', '$description');";
+                    $sql = "INSERT INTO `hrstaffdocument` (`EmpCode`, `DocType`, `Description`, `Photo`)
+                    VALUES ('$empCode', '$docType', '$description', '$fileName')";
                     $rundocument = $con->query($sql);
                 }
             }
         }
+
         if ($rundocument && $runfamily && $runeducation) {
             echo "success";
         } else if ($runEmp && !$runfamily || !$runeducation || !$rundocument) {

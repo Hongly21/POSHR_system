@@ -62,8 +62,7 @@ include '../../Config/conect.php';
     }
 </style>
 
-<h3 class="text-center"
-    style="margin: 20px 0px;">TAX RATE SETTING</h3>
+<h2 style="margin-top: 10px; text-transform: uppercase; text-align: center;" >TAX RATE SETTING</h2>
 <div class="container" style="margin-top: 15px; border: 0.4px solid #ccc;  padding: 20px; border-radius: 5px;">
     <?php
     $sql = "SELECT * FROM prtaxrate";

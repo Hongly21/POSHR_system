@@ -1,5 +1,6 @@
 <?php
 include("root/header.php");
+include('Config/conect.php');
 
 ?>
 <style>
@@ -95,7 +96,26 @@ include("root/header.php");
                 <i class="fas fa-user-tie me-2"></i>
                 <?php
                 $username = $_GET['username'];
+                $sqluser = "SELECT * FROM hrusers WHERE Username = '$username'";
+                $resultuser = $con->query($sqluser);
+                $rowuser = $resultuser->fetch_assoc();
+                $role = $rowuser['Role'];
+
                 echo $username;
+                ?>
+
+                <span style="font-size: 12px; margin-left:5px;"
+                    class='badge rounded-pill bg-<?php
+                                                    echo $role === 'admin' ? 'danger' : ($role === 'manager' ? 'warning' : 'info');
+                                                    ?>'><?php
+                        if ($role === 'admin') {
+                            echo "Admin";
+                        } else if ($role === 'manager') {
+                            echo "Manager";
+                        } else echo "User"; ?>
+                </span>
+                <?php
+
                 ?>
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">

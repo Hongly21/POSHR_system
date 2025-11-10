@@ -35,6 +35,7 @@ $photo = $row['Photo'];
 
 
 
+
 ?>
 <html>
 
@@ -67,7 +68,7 @@ $photo = $row['Photo'];
 
     .dcs {
         /* background-color: green; */
-    
+
         margin-top: 10px;
         padding: 0px 5px 0px 15px;
         box-sizing: border-box;
@@ -75,30 +76,37 @@ $photo = $row['Photo'];
 
     label {
         display: inline-block;
-            color: white;
+        color: white;
         width: 65px;
         /* adjust width to align labels neatly */
         font-weight: 600;
         margin-bottom: 8px;
     }
 
-    input {
-        width: calc(100% - 90px);
-        /* make input align beside label */
-        padding: 6px 10px;
-        margin-bottom: 10px;
-        border: 1px solid #ccc;
-        border-radius: 6px;
-        background: #f9f9f9;
-        font-size: 14px;
-        color: #333;
-    }
-    .username{
+
+    .username {
         color: white;
         margin-top: 20px;
         text-align: center;
         font-weight: bold;
-        margin-bottom: 40px;
+        margin-bottom: 30px;
+    }
+
+    .universtity-infor {
+        margin-left: 10px;
+
+    }
+
+    .universtity-infor input {
+        margin: 5px 0px 5px 12px;
+        padding: 0px 0px 0px 5px;
+        color: #333;
+        box-sizing: border-box;
+
+    }
+
+    .universtity-infor td:first-child {
+        font-weight: bold;
     }
 </style>
 
@@ -110,6 +118,8 @@ $photo = $row['Photo'];
         <div class="name">
             <h1 class="username"><?php echo $username ?></h1>
         </div>
+        <hr style="color: white; margin: 0px 0px 10px 0px;">
+
         <div class="universtity-infor">
             <?php
             $sql = "SELECT hrstaffprofile.EmpName, hreducation.* FROM hrstaffprofile INNER JOIN hreducation ON hrstaffprofile.EmpCode= hreducation.EmpCode 
@@ -117,37 +127,43 @@ $photo = $row['Photo'];
             $run = $con->query($sql);
             while ($resutlemp = $run->fetch_assoc()) {
                 $institution = $resutlemp['Institution'];
-                $degree = $resutlemp['Degree'];
-                $fieldstudy = $resutlemp['FieldOfStudy'];
-
-
-
-            ?>
-                <!-- <label for="universtiy">Universtity</label> -->
-                <div class="dcs">
-                    <label for="">EUD:</label>
-                    <input type="text" id="university" value="<?php echo $institution ?>" disabled><br>
-                    <label for="">Degree:</label>
-
-                    <input type="text" id="degree" value="<?php echo $degree ?>" disabled><br>
-                    <label for="">Major:</label>
-
-                    <input type="text" id="major" value="<?php echo $fieldstudy ?>" disabled><br>
-                </div>
-
-
-            <?php
             }
             ?>
+
+
+
+            <table>
+                <tr>
+                    <td class="label"><label for="Code">Position</label></td>
+                    <td><input type="text" id="Code" value="<?php echo $row['PositionName']; ?>" disabled></td>
+                </tr>
+                <tr>
+                    <td class="label"><label for="EmpName">Address</label></td>
+                    <td><input type="text" id="EmpName" value="<?php echo $row['Address']; ?>" disabled></td>
+                </tr>
+                <tr>
+                    <td class="label"><label for="dob">Contact</label></td>
+                    <td><input type="text" id="dob" value="<?php echo $row['Contact']; ?>" disabled></td>
+                </tr>
+                <tr>
+                    <td class="label"><label for="Gender">Email</label></td>
+                    <td><input type="text" id="Gender" value="<?php echo $row['Email']; ?>" disabled></td>
+                </tr>
+                <tr>
+                    <td class="label"><label for="Gender">University</label></td>
+                    <td><input type="text" id="Gender" value="<?php echo $institution; ?>" disabled></td>
+                </tr>
+
+            </table>
         </div>
-        <ul class="list-unstyled components">
+        <!-- <ul class="list-unstyled components">
             <li>
-                <!-- <a href="../view/Dashboard/index.php" target="content">
-                    <i class="fa fa-home"></i>Dasborad
-                </a> -->
+
             </li>
 
-        </ul>
+        </ul> -->
+
+
     </div>
 
     <!-- Scripts -->

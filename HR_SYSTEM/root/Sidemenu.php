@@ -71,6 +71,9 @@
                         <li>
                             <a href="../view/CareerHistory/index.php" target="content">Career History</a>
                         </li>
+                             <li>
+                            <a href="../view/StaffProfile/Infor/index.php" target="content">Information</a>
+                        </li>
                     </ul>
                 </li>
 

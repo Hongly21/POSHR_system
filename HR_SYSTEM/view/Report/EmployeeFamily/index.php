@@ -296,16 +296,6 @@ include('../../../root/Header.php');
                                         ";
                                 }
                             } else {
-                                echo "
-                                    <script>
-                                    // all members of employee family
-                                           Swal.fire({
-                                           icon: 'info',
-                                           title: 'All Members',
-                                           text: 'All Members Of Employee Family',
-                                           })
-                                    </script>
-                                    ";
                                 $sql3 = "SELECT * FROM hrfamily";
                                 $run3 = $con->query($sql3);
                                 while ($row3 = $run3->fetch_assoc()) {

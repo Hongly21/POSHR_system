@@ -62,17 +62,12 @@ include '../../Config/conect.php';
         background-color: #0056b3;
     }
 </style>
-<h3 class="text-center" style="margin-top: 15px; text-transform: uppercase;">Staff Profile</h3>
+<h2 style="margin-top: 10px; text-align: center; text-transform: uppercase;">Staff Profile</h2>
 <div class="container" style="margin-top: 15px; border: 0.4px solid #ccc;  padding: 20px; border-radius: 5px;">
     <table class="table" id="example" border="1">
-        <!-- <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#AddstaffModal" style="margin-bottom: 8px; font-size: 14px; ">
-            Add New
-        </button> -->
-        <!-- Button trigger modal -->
 
         <a href="create.php" style="text-decoration: none; color:white;">
             <button class="btn btn-sm btn-success me-2" style="margin-bottom: 8px; font-size: 14px;"> <i class="fa fa-plus" style="margin-right: 4px;"></i> Add New </button>
-
         </a>
         <!-- export -->
         <button class="btn btn-sm btn-warning me-2 btnExport" style="margin-bottom: 8px; font-size: 14px;" id="export"> <i class="fa fa-file-excel" style="margin-right: 4px;"></i> Export Excel </button>
@@ -225,7 +220,7 @@ include '../../Config/conect.php';
                             timer: 1500,
                             showConfirmButton: false
                         }).then(() => {
-                            location.reload(); // 🔄 Refresh the page
+                            location.reload(); // Refresh the page
                         });
                     },
                     error: function(xhr, status, error) {

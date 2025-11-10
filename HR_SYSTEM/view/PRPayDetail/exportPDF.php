@@ -1,6 +1,7 @@
 <?php
 require '../../Config/conect.php';
 require_once '../CareerHistory/exportPDF/vendor/autoload.php';
+include('../../root/Header.php');
 
 use Mpdf\Mpdf;
 
@@ -8,7 +9,12 @@ $empcode = $_GET['empCode'] ?? '';
 $month = $_GET['month'] ?? '';
 
 if (empty($empcode) || empty($month)) {
-    die('Missing employee code or month.');
+    die('
+    <script>
+
+    alert("Please provide both Employee Code and Month.");
+    window.close();
+    </script>');
 }
 
 // Fetch employee info

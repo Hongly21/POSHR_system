@@ -62,6 +62,7 @@ include("../../Config/conect.php");
     }
 
     .detail-header {
+
         background: var(--bg-light);
         padding: 1.25rem;
         border-bottom: 1px solid var(--border-color);
@@ -229,6 +230,8 @@ include("../../Config/conect.php");
         height: 3rem;
     }
 </style>
+
+
 <div class="container-fluid mt-3">
 
     <div class="card">
@@ -341,7 +344,7 @@ include("../../Config/conect.php");
                 $UntaxAm = $row1['UntaxAm'];
                 $NSSF = $row1['NSSF'];
                 $NetSalary = $row1['NetSalary'];
-                $Family=$row1['Family'];
+                $Family = $row1['Family'];
             } else {
                 $empcode = '';
                 $empName = '';
@@ -369,9 +372,9 @@ include("../../Config/conect.php");
             <div id="employeeDetails" class="detail-card">
                 <div class="detail-header">
                     <h6 class="mb-0">Employee Information</h6>
+
                 </div>
                 <div class="detail-body">
-
                     <div class="row">
                         <div class="col-md-3">
                             <p class="info-label">Employee Code:</p>
@@ -401,11 +404,17 @@ include("../../Config/conect.php");
                 <div class="detail-body">
                     <table class="table table-bordered" id="salaryTable">
                         <thead>
+                            <!-- export button -->
+                            <a style="margin-bottom: 10px;"
+                                href="exportPDF.php?empCode=<?= $empcode ?>&month=<?= $month ?>" target="_blank" class="btn btn-danger mt-3">
+                                <i class="fas fa-file-pdf"></i> Export to PDF
+                            </a>
                             <tr>
                                 <th>Component</th>
                                 <th>Description</th>
                                 <th>Amount</th>
                             </tr>
+
                         </thead>
                         <tbody>
                             <tr>
@@ -444,16 +453,13 @@ include("../../Config/conect.php");
                                 <td class="text-end">$<?php echo $NSSF; ?></td>
                             </tr>
 
-
                         </tbody>
                         <tfoot>
                             <tr>
                                 <th colspan="2" class="text-end">Total Net Pay:</th>
                                 <th id="totalNetPay" class="salary-amount">$<?php echo $NetSalary; ?></th>
                             </tr>
-                            <a href="exportPDF.php?empCode=<?= $empcode ?>&month=<?= $month ?>" target="_blank" class="btn btn-danger mt-3">
-                                <i class="fas fa-file-pdf"></i> Export to PDF
-                            </a>
+                            <tr>
                         </tfoot>
                     </table>
                 </div>

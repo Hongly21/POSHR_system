@@ -16,7 +16,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'adminSMS') {
 if (isset($_POST['action']) && $_POST['action'] == 'userSMS') {
     $username = $_POST['username'];
     $password = $_POST['password'];
-    $sql = "SELECT * FROM hrusers WHERE Username = '$username' AND Password = '$password'";
+    $sql = "SELECT * FROM hrusers WHERE Username = '$username' OR Email = '$username' AND Password = '$password'";
     $result = $con->query($sql);
     if ($result && $result->num_rows > 0) {
         echo "success";

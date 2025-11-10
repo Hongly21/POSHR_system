@@ -16,6 +16,7 @@ include("../../action/Dashboard/fetch.php");
 </head>
 
 <body>
+    <h2 style="text-align: center; margin-top: 15px; text-transform: uppercase;">Admin Panel</h2>
     <div class="container-fluid py-4">
         <div class="dashboard-header">
             <h4 class="mb-0">
@@ -48,7 +49,7 @@ include("../../action/Dashboard/fetch.php");
                     <div class="metric-icon bg-purple-soft">
                         <i class="fas fa-venus-mars text-white"></i>
                     </div>
-                    <div class="metric-value">0</div>
+                    <div class="metric-value"><?php echo $FemaleCount; ?></div>
                     <div class="metric-label">Female</div>
                 </div>
             </div>

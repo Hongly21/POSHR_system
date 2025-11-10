@@ -24,11 +24,15 @@ include '../../root/Header.php';
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
+            background-image: url(../../assets/images/spider.jpg);
+            background-size: cover;
+            background-position: center;
+            font-family: Arial, sans-serif;
         }
 
         .login-container {
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.58);
             border-radius: 15px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
             padding: 2rem;
@@ -86,7 +90,7 @@ include '../../root/Header.php';
         <form id="loginForm" method="POST">
 
             <div class="mb-3">
-                <label for="username" class="form-label">Username</label>
+                <label for="username" class="form-label">Username or Email</label>
                 <input type="text" class="form-control" id="username" name="username" required>
             </div>
 

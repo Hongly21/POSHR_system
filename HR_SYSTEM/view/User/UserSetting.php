@@ -46,7 +46,7 @@ include("../../Config/conect.php");
                     <td>
                         <span class="badge bg-<?php echo $row['Role'] === 'admin' ? 'danger' : ($row['Role'] === 'manager' ? 'warning' :
                                                     'info'); ?>"><?php echo ucfirst($row['Role']);
-                                        ?>
+                                                                    ?>
                         </span>
                     </td>
                     <td><span class="badge bg-<?php echo $row['Status'] === 'active' ? 'success' : 'secondary'; ?>"><?php echo ucfirst($row['Status']); ?></span></td>
@@ -116,9 +116,9 @@ include("../../Config/conect.php");
                         </label>
                         <select class="form-select" id="role" required>
                             <option value="">Select role...</option>
-                            <option value="staff">Staff</option>
-                            <option value="manager">Manager</option>
-                            <option value="admin">Admin</option>
+                            <option value="Staff">Staff</option>
+                            <option value="Manager">Manager</option>
+                            <option value="Admin">Admin</option>
                         </select>
                         <div class="invalid-feedback">Please select a role.</div>
                     </div>

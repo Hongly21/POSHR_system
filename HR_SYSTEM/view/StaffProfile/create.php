@@ -616,15 +616,6 @@ include('../../Config/conect.php');
         }
     });
 
-    // Initialize Toast notification
-    const Toast = Swal.mixin({
-        toast: true,
-        position: 'top-end',
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true
-    });
-
     $(document).ready(function() {
 
         // family member management===============================================
@@ -853,6 +844,9 @@ include('../../Config/conect.php');
 
 
 
+
+
+
         // staff document===============================================
 
         var documentList = [];
@@ -1016,20 +1010,103 @@ include('../../Config/conect.php');
 
         // save staff ===============================================
 
+
+        // $("#saveStaff").on("click", function(event) {
+        //     event.preventDefault();
+
+        //     // collect all form data
+        //     var formData = new FormData($("#staffForm")[0]);
+
+        //     // add familyMembers array
+        //     formData.append("family", JSON.stringify(familyMembers));
+
+        //     // add education array
+        //     formData.append("education", JSON.stringify(educationList));
+
+        //     // add document array
+        //     formData.append("document", JSON.stringify(documentList));
+
+        //     $.ajax({
+        //         url: "../../action/StaffProfile/create.php",
+        //         type: "POST",
+        //         data: formData,
+        //         processData: false,
+        //         contentType: false,
+        //         success: function(response) {
+        //             response = response.trim(); // clean spaces/newlines
+
+        //             if (response === "success") {
+        //                 Swal.fire({
+        //                     icon: 'success',
+        //                     title: 'Success',
+        //                     text: 'Staff and all related data saved successfully!'
+        //                 }).then(function() {
+        //                     window.location.href = 'index.php';
+        //                 });
+        //             } else if (response === "Success add only staff") {
+        //                 Swal.fire({
+        //                     icon: 'success',
+        //                     title: 'Partial Success',
+        //                     text: 'Staff saved, but family, education, or documents were not added.'
+        //                 }).then(function() {
+        //                     window.location.href = 'index.php';
+        //                 });
+        //             } else if (response === "Employee Code already exists!") {
+        //                 Swal.fire({
+        //                     icon: 'warning',
+        //                     title: 'Error',
+        //                     text: 'Employee Code already exists!'
+        //                 });
+        //             } else if (response === "All fields are required! Please fill all the required fields on Staff Profile form.") {
+        //                 Swal.fire({
+        //                     icon: 'warning',
+        //                     title: 'Error',
+        //                     text: 'All required fields must be filled!'
+        //                 });
+        //                 // } else if (response === "fail") {
+        //                 //     Swal.fire({
+        //                 //         icon: 'error',
+        //                 //         title: 'Error',
+        //                 //         text: 'Failed to save staff profile.'
+        //                 //     });
+        //             } else {
+        //                 Swal.fire({
+        //                     icon: 'warning',
+        //                     title: 'Success add only staffDetail!',
+        //                     // text: response
+        //                 });
+        //             }
+        //         },
+        //         error: function(xhr, status, error) {
+        //             console.error(error);
+        //             Swal.fire({
+        //                 icon: 'error',
+        //                 title: 'Error',
+        //                 text: 'Something went wrong while saving staff!'
+        //             });
+        //         }
+        //     });
+
+        // });
+
+
         $("#saveStaff").on("click", function(event) {
             event.preventDefault();
 
-            // collect all form data
             var formData = new FormData($("#staffForm")[0]);
 
-            // add familyMembers array
             formData.append("family", JSON.stringify(familyMembers));
 
-            // add education array
             formData.append("education", JSON.stringify(educationList));
 
-            // add document array
-            formData.append("document", JSON.stringify(documentList));
+            documentList.forEach((doc, index) => {
+                formData.append(`document[${index}][docType]`, doc.docType);
+                formData.append(`document[${index}][description]`, doc.description);
+
+                if (doc.docFile instanceof File) {
+                    formData.append(`document[${index}][docFile]`, doc.docFile);
+                }
+            });
 
             $.ajax({
                 url: "../../action/StaffProfile/create.php",
@@ -1038,7 +1115,7 @@ include('../../Config/conect.php');
                 processData: false,
                 contentType: false,
                 success: function(response) {
-                    response = response.trim(); // clean spaces/newlines
+                    response = response.trim(); 
 
                     if (response === "success") {
                         Swal.fire({
@@ -1068,17 +1145,10 @@ include('../../Config/conect.php');
                             title: 'Error',
                             text: 'All required fields must be filled!'
                         });
-                        // } else if (response === "fail") {
-                        //     Swal.fire({
-                        //         icon: 'error',
-                        //         title: 'Error',
-                        //         text: 'Failed to save staff profile.'
-                        //     });
                     } else {
                         Swal.fire({
                             icon: 'warning',
-                            title: 'Success add only staffDetail!',
-                            // text: response
+                            title: 'Success add only staffDetail!'
                         });
                     }
                 },
@@ -1091,8 +1161,8 @@ include('../../Config/conect.php');
                     });
                 }
             });
-
         });
+
 
 
 

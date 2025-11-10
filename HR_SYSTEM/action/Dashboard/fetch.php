@@ -22,10 +22,10 @@ $row = $result->fetch_assoc();
 $avgAge = round($row['avg_age'] ?? 0);
 
 // Get gender 
-$stmt = $con->prepare("select Count(*) from hrstaffprofile where Gender='Female'");
+$stmt = $con->prepare("SELECT Count(*) as count FROM hrstaffprofile WHERE Gender='Female'");
 $stmt->execute();
 $result = $stmt->get_result();
-//$FemaleCount = $result->fetch_assoc()['count'];
+$FemaleCount = $result->fetch_assoc()['count'];
 
 // Get HR to Employee ratio
 $stmt = $con->prepare("SELECT COUNT(*) as hr_count FROM hrstaffprofile WHERE Department = 'Human Resources' AND Status = 'Active'");

@@ -7,7 +7,7 @@ include('../../root/DataTable.php');
 
 ?>
 
-<h2 style="text-align: center; margin-top: 10px;">Generate Salary</h2>
+<h2 style="text-align: center; text-transform: uppercase; margin-top: 10px;">Generate Salary</h2>
 
 <div class="container1" style="margin: auto; margin-top: 20px; 
 box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); padding: 20px; border-radius: 5px;">
