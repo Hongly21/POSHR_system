@@ -3,6 +3,9 @@ include('../../root/Header.php');
 include('../../root/DataTable.php');
 include('../../Config/conect.php');
 ?>
+<!-- Add SweetAlert2 CSS and JS -->
+<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
 <h3 style="text-align: center;">Add New Staff</h3>
 
 
@@ -555,7 +558,7 @@ include('../../Config/conect.php');
                         </div>
                         <div class="mb-3">
                             <label for="docFile" class="form-label  ">Document File</label>
-                            <input type="file" class="form-control" id="docFile" name="docFile">
+                            <input type="file" class="form-control" id="docFile" name="docFile" accept=".pdf,application/pdf"> <br>
                             <!-- <input type="file" class="form-control" id="photo" name="photo" accept="image/*"> -->
                         </div>
                     </form>
@@ -617,6 +620,15 @@ include('../../Config/conect.php');
     });
 
     $(document).ready(function() {
+        // Initialize Toast notification
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true
+        });
+
 
         // family member management===============================================
 
@@ -640,6 +652,11 @@ include('../../Config/conect.php');
             var istax = $('#isTax').is(':checked') ? 1 : 0;
 
             if (editIndex === -1) {
+
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Family member added'
+                });
                 // add new
                 familyMembers.push({
                     name: name,
@@ -648,6 +665,10 @@ include('../../Config/conect.php');
                     istax: istax
                 });
             } else {
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Family member updated'
+                });
                 // update existing
                 familyMembers[editIndex] = {
                     name: name,
@@ -659,11 +680,8 @@ include('../../Config/conect.php');
 
             displaymember();
             $('#familyMemberModal').modal('hide');
-            // alert('Family member saved successfully!');
-            Toast.fire({
-                icon: 'success',
-                title: editIndex === -1 ? 'Family member added successfully!' : 'Family member updated successfully!'
-            });
+
+
         });
 
         // function to display family members in table
@@ -751,6 +769,10 @@ include('../../Config/conect.php');
             var endDate = $('#endDate').val();
 
             if (educationIndex === -1) {
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Education added success'
+                });
                 // add new
                 educationList.push({
                     institution: institution,
@@ -760,6 +782,10 @@ include('../../Config/conect.php');
                     endDate: endDate
                 });
             } else {
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Education update success'
+                });
                 // update existing
                 educationList[educationIndex] = {
                     institution: institution,
@@ -868,6 +894,10 @@ include('../../Config/conect.php');
 
 
             if (documentIndex === -1) {
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Document add success'
+                });
                 // add new
                 documentList.push({
                     docType: docType,
@@ -875,6 +905,10 @@ include('../../Config/conect.php');
                     docFile: docFileInput
                 });
             } else {
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Document update success'
+                });
                 // update existing
                 documentList[documentIndex] = {
                     docType: docType,
@@ -965,11 +999,9 @@ include('../../Config/conect.php');
             }
         });
 
-
+        //delete document
         $(document).on('click', '.removeDocument', function() {
             var index = $(this).data('index');
-            // documentList.splice(index, 1);
-            // displayDocument();
 
             Swal.fire({
                 title: 'Are you sure?',
@@ -991,14 +1023,14 @@ include('../../Config/conect.php');
             });
         });
 
+        //edite document
         $(document).on('click', '.editDocument', function() {
             var index = $(this).data('index');
             documentIndex = index;
 
             $('#docType').val(documentList[index].docType);
             $('#description').val(documentList[index].description);
-            // $('#docFile').val(documentList[index].docFile);
-            $('#docFile').val('');
+
 
             $('#documentModal').modal('show');
         })
@@ -1115,7 +1147,7 @@ include('../../Config/conect.php');
                 processData: false,
                 contentType: false,
                 success: function(response) {
-                    response = response.trim(); 
+                    response = response.trim();
 
                     if (response === "success") {
                         Swal.fire({

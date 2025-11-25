@@ -97,6 +97,8 @@ include '../../root/Header.php';
             <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
                 <input type="password" class="form-control" id="password" name="password" required>
+                <p style="color: black; font-size: 10px; margin-top: 10px;">if you are new user you can login only with your email or username and set your password later by yourself</p>
+
             </div>
 
             <button type="button" class="btn btn-primary" id="loginButton">

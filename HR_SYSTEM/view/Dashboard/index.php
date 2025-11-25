@@ -18,6 +18,7 @@ include("../../action/Dashboard/fetch.php");
 <body>
     <h2 style="text-align: center; margin-top: 15px; text-transform: uppercase;">Admin Panel</h2>
     <div class="container-fluid py-4">
+
         <div class="dashboard-header">
             <h4 class="mb-0">
                 <i class="fas fa-chart-line text-primary"></i> Workforce Performance Dashboard
@@ -110,36 +111,6 @@ include("../../action/Dashboard/fetch.php");
             </div>
         </div>
 
-        <!-- Charts -->
-        <div class="row g-3">
-            <div class="col-md-8">
-                <div class="chart-container">
-                    <h5>
-                        <i class="fas fa-chart-bar text-primary" style="background: #e3f2fd;"></i>
-                        Employee count by department
-                    </h5>
-                    <div style="height: 300px;">
-                        <canvas id="departmentChart">
-
-                        </canvas>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="chart-container">
-                    <h5>
-                        <i class="fas fa-chart-pie text-success" style="background: #e8f5e9;"></i>
-                        Salary Distribution
-                    </h5>
-                    <div style="height: 300px;">
-                        <canvas id="salaryChart">
-
-                        </canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- Employee Details Table -->
         <div class="row g-3">
             <div class="col-12">
@@ -204,6 +175,41 @@ include("../../action/Dashboard/fetch.php");
                 </div>
             </div>
         </div>
+
+
+        <!-- Charts -->
+        <div class="row g-3">
+            <div class="col-md-8">
+
+
+                <div class="chart-container">
+                    <h5>
+                        <i class="fas fa-chart-bar text-primary" style="background: #e3f2fd; margin-right: 10px;"></i>
+                        Employee count by department
+                    </h5>
+
+                    <div style="height: 300px;">
+                        <canvas id="departmentChart">
+
+                        </canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="chart-container">
+                    <h5>
+                        <i class="fas fa-chart-pie text-success" style="background: #e8f5e9; margin-right: 10px;"></i>
+                        Salary Distribution
+                    </h5>
+                    <div style="height: 300px;">
+                        <canvas id="salaryChart">
+
+                        </canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <script>

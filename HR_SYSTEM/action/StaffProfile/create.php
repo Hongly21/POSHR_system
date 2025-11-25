@@ -48,21 +48,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         `Division`, `StartDate`, `Status`, `Contact`, `Email`, `Address`,
                         `LineManager`, `Hod`, `Photo`, `IsProb`, `Salary`, `PayParameter`, 
                         `Telegram`, `ProbationDate`)
-     VALUES ('$empCode', '$empName', '$gender', '$dob', '$position', '$department', '$company', '$level', '$division', 
-     '$startdate', '$status', '$contact', '$email', '$address',
-      '$lineManager', '$headdepartment', '$img', '$isProb', '$salary', '$payparameter', '$telegram', '$proEnd');";
+                        VALUES ('$empCode', '$empName', '$gender', '$dob', '$position', '$department', '$company', '$level', '$division', 
+                        '$startdate', '$status', '$contact', '$email', '$address',
+                        '$lineManager', '$headdepartment', '$img', '$isProb', '$salary', '$payparameter', '$telegram', '$proEnd');";
         $runEmp = $con->query($empSQL);
 
         $sqlcareerhistory = "INSERT INTO careerhistory (
-            CareerHistoryType, EmployeeID, PositionTitle, Department, Division, Company,
-            StartDate, EndDate, Remark, Increase,
-            CreatedAt, UpdatedAt
-        ) VALUES (
-            'New', '$empCode', '$position', '$department','$division','$company',
-            '$startdate', '', '', '0',
-            NOW(), NOW()
-        );";
+                                CareerHistoryType, EmployeeID, PositionTitle, Department, Division, Company,
+                                StartDate, EndDate, Remark, Increase,
+                                CreatedAt, UpdatedAt
+                            ) VALUES (
+                                'New', '$empCode', '$position', '$department','$division','$company',
+                                '$startdate', '', '', '0',
+                                NOW(), NOW()
+                            );";
         $runcareerhistory = $con->query($sqlcareerhistory);
+
+
+        $sqluser = "INSERT INTO `hrusers` (`UserID`, `Username`, `Email`, `Role`, `LastLogin`, `CreatedAt`, `UpdatedAt`) 
+        VALUES (NULL, '$empName', '$email', 'Staff', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+";
+        $runuser = $con->query($sqluser);
+
+
 
 
         // Family members
@@ -99,12 +107,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
         }
-
-
-
-
-
-
 
         //documents 
         // documents (handle files and metadata properly)

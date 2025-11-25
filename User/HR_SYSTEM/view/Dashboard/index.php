@@ -376,8 +376,8 @@ if ($run->num_rows > 0) {
                                         <th>
                                             No
                                         </th>
-                                        <th>EmpCode</th>
-                                        <th>Document Type</th>
+
+                                        <th>DocumentType</th>
                                         <th>Description</th>
                                         <th>File Name</th>
                                         <th>Action</th>
@@ -393,7 +393,6 @@ if ($run->num_rows > 0) {
                                     ?>
                                         <tr>
                                             <td><?php echo $no++ ?></td>
-                                            <td><?php echo $rowduc['EmpCode']; ?></td>
                                             <td><?php echo $rowduc['DocType']; ?></td>
                                             <td><?php echo $rowduc['Description']; ?></td>
                                             <td><?php echo $rowduc['Photo']; ?></td>
@@ -1023,6 +1022,8 @@ if ($run->num_rows > 0) {
 
                             <label class="label" for="Password">Password</label>
                             <input type="password" name="Password" id="Password" value=" <?php echo $password; ?>" disabled> <br>
+                            <p style="color: gray; font-size: 14px;">Please set new password if you are new user</p>
+
                         </div>
 
                         <!-- Button trigger modal -->
